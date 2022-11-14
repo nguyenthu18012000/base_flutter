@@ -1,3 +1,4 @@
+import 'package:base_bloc_flutter/constants/route_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_core/flutter_core.dart';
 
@@ -9,15 +10,10 @@ class EmployeePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = GetIt.instance.get<EmployeeBloc>();
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Employee List'),
-      ),
-      body: BlocProvider.value(
-        value: bloc..add(GetEmployeesEvent()),
-        child: const EmployeeListener(),
-      ),
+    return AppScaffold<EmployeeBloc>(
+      title: const Text('Employee List'),
+      onLoadData: (bloc) => bloc?.add(GetEmployeesEvent()),
+      body: const EmployeeListener(),
     );
   }
 }
@@ -64,7 +60,12 @@ class EmployeeListWidget extends StatelessWidget {
           itemCount: employees?.length ?? 0,
           itemBuilder: (context, index) {
             final item = employees?[index];
-            return EmployeeItem(item: item);
+            return InkWell(
+                onTap: (() {
+                  Navigator.of(context)
+                      .pushNamed(RouteConstants.detail, arguments: item);
+                }),
+                child: EmployeeItem(item: item));
           },
         );
       },

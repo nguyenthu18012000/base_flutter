@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../../flutter_core.dart' as core;
+
 class AppScaffold<T extends Bloc> extends StatefulWidget {
   const AppScaffold({
     Key? key,
@@ -12,9 +14,8 @@ class AppScaffold<T extends Bloc> extends StatefulWidget {
     this.onReceiveArguments,
     this.onWillPop,
     this.safeArea = true,
-    this.loadData,
+    this.onLoadData,
     this.floatingActionButton,
-    this.appBarElevation,
     this.actions,
     this.padding = const EdgeInsets.symmetric(horizontal: 16.0),
   }) : super(key: key);
@@ -23,11 +24,10 @@ class AppScaffold<T extends Bloc> extends StatefulWidget {
   final Widget? title;
   final Function(Object? params, T? bloc)? onReceiveArguments;
   final Function()? onWillPop;
-  final Function(T? bloc)? loadData;
+  final Function(T? bloc)? onLoadData;
   final bool isBack;
   final bool safeArea;
   final FloatingActionButton? floatingActionButton;
-  final double? appBarElevation;
   final List<Widget>? actions;
   final EdgeInsetsGeometry padding;
 
@@ -43,7 +43,7 @@ class _AppScaffoldState<T extends Bloc> extends State<AppScaffold<T>> {
     super.initState();
     bloc = GetIt.instance.get<T>();
     WidgetsBinding.instance
-        .addPostFrameCallback((_) => widget.loadData?.call(bloc));
+        .addPostFrameCallback((_) => widget.onLoadData?.call(bloc));
   }
 
   @override
@@ -70,7 +70,7 @@ class _AppScaffoldState<T extends Bloc> extends State<AppScaffold<T>> {
                   iconTheme: const IconThemeData(
                     color: Colors.black,
                   ),
-                  elevation: widget.appBarElevation ?? 0.0,
+                  elevation: 0.0,
                   centerTitle: true,
                   title: widget.title!,
                   actions: widget.actions,

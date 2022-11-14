@@ -1,6 +1,7 @@
 {
   "ui": {
-    "yes": "YES"
+    "yes": "ENGLISH",
+    "title": "ENGLISH"
   },
   "msg": {
     "success": "success"

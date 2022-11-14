@@ -13,6 +13,10 @@ class UserInfo {
 
   static Stream<bool> get onLogin => _onLogin.stream.distinct();
 
+  static Future initUserInfo() async {
+    await getTokenFromCached();
+  }
+
   static Future getTokenFromCached() async {
     final tempToken = await SharePrefHelper.instance.getValue(key: tokenKey);
     token = tempToken;
@@ -28,7 +32,7 @@ class UserInfo {
   }
 
   static Future logout() async {
-    await SharePrefHelper.instance.setValue(null, key: tokenKey);
+    await SharePrefHelper.instance.setValue("", key: tokenKey);
     token = null;
     _onLogin.sink.add(false);
   }

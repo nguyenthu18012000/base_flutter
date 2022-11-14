@@ -2,7 +2,7 @@ import 'dart:developer' as dev;
 import 'package:flutter/material.dart';
 import 'package:flutter_core/flutter_core.dart';
 
-import '../architecture/presentation/pages/pages.dart';
+import '../application/presentation/pages/pages.dart';
 import '../constants/constants.dart';
 
 Future<void> config(GetIt injector) async {
@@ -10,6 +10,10 @@ Future<void> config(GetIt injector) async {
     injector.registerFactory<Widget>(
       () => const EmployeePage(),
       instanceName: RouteConstants.employee,
+    );
+    injector.registerFactory<Widget>(
+      () => const DetailPage(),
+      instanceName: RouteConstants.detail,
     );
   } catch (e) {
     dev.log('Config PageDependencies failed');

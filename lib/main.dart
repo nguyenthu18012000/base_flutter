@@ -8,6 +8,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   await AppConfig.instance.configApp(env: Env.dev);
+  await UserInfo.initUserInfo();
   final startLocale = await LocaleHelper.instance.getDefaultLocale();
   runApp(
     EasyLocalization(

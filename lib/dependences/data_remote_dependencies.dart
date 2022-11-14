@@ -2,7 +2,7 @@ import 'dart:developer' as dev;
 
 import 'package:flutter_core/flutter_core.dart';
 
-import '../architecture/datasource/datasources.dart';
+import '../application/datasource/datasources.dart';
 
 Future<void> config(GetIt injector) async {
   try {

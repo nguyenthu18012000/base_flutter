@@ -12,10 +12,10 @@ class AppConfig {
   Future<void> configApp({required Env env}) async {
     await _configEnv(env: env);
     await _configDi();
-    _configUI();
+    await _configUI();
   }
 
-  void _configUI() {
+  Future<void> _configUI() async {
     EasyLoading.instance
       ..userInteractions = false
       ..dismissOnTap = false;
