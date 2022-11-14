@@ -1,8 +1,8 @@
 import 'package:flutter_core/flutter_core.dart';
-import 'package:global_configs/global_configs.dart';
 
-import 'constants/constants.dart';
-import 'dependences/dependencies.dart' as di;
+import '../constants/constants.dart';
+import '../dependences/dependencies.dart' as di;
+import 'env_config.dart';
 
 class AppConfig {
   AppConfig._();
@@ -28,16 +28,4 @@ class AppConfig {
   Future _configDi() async {
     await di.init();
   }
-}
-
-class EnvConfig {
-  EnvConfig._();
-
-  static EnvConfig get instance => EnvConfig._();
-
-  Future<void> load({required String envStr}) async {
-    await GlobalConfigs().loadJsonFromdir('assets/cfg/env_$envStr.json');
-  }
-
-  String get apiUrl => GlobalConfigs().get('api_url');
 }

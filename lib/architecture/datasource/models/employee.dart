@@ -6,6 +6,13 @@ class Employee extends Equatable {
 
   const Employee({this.name, this.age});
 
+  factory Employee.fromJson(Map<String, dynamic> json) {
+    return Employee(
+      name: json['name'],
+      age: json['age'],
+    );
+  }
+
   @override
   List<Object?> get props => [name, age];
 }

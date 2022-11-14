@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_core/flutter_core.dart';
 
-import 'app_config.dart';
+import 'configs/app_config.dart';
 import 'constants/constants.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   await AppConfig.instance.configApp(env: Env.dev);
-  runApp(const MyApp());
+  final startLocale = await LocaleHelper.instance.getDefaultLocale();
+  runApp(
+    EasyLocalization(
+        supportedLocales: LocaleHelper.instance.supportedLocales,
+        path: 'assets/translations',
+        fallbackLocale: LocaleHelper.instance.fallbackLocale,
+        startLocale: startLocale,
+        child: const MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -17,7 +26,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Demo App',
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
+      title: 'App',
       theme: ThemeConstants.get(context),
       onGenerateRoute: RouteConfig.instance.routes,
       onGenerateInitialRoutes: (_) => [

@@ -31,9 +31,7 @@ dependencies:
     sdk: flutter
   flutter_core:
     path: packages/flutter_core
-  json_annotation: any
-  url_launcher: any
-  global_configs: any
+  global_configs: ^1.1.2
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -49,10 +47,6 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  json_serializable: any
-  mockito: any
-  bloc_test: any
-  build_runner: any
   flutter_lints: any
 
 # For information on the generic Dart part of this file, see the
@@ -68,7 +62,10 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/cfg/
+    - assets/cfg/env_dev.json
+    - assets/cfg/env_stg.json
+    - assets/cfg/env_prod.json
+    - assets/translations/
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

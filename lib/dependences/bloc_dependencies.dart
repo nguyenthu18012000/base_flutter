@@ -1,7 +1,7 @@
 import 'dart:developer' as dev;
 import 'package:flutter_core/flutter_core.dart';
 
-import '../layers/application/blocs/blocs.dart';
+import '../architecture/bloc/blocs.dart';
 
 Future<void> config(GetIt injector) async {
   try {

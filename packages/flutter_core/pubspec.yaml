@@ -10,16 +10,18 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  dartz: any
-  dio: any
-  flutter_bloc: any
-  get_it: any
-  page_transition: any
-  internet_connection_checker: any
-  equatable: any
-  intl: any
-  shared_preferences: any
-  flutter_easyloading: any
+  dartz: ^0.10.1
+  dio: ^4.0.6
+  flutter_bloc: ^8.1.1
+  get_it: ^7.2.0
+  page_transition: ^2.0.9
+  equatable: ^2.0.5
+  intl: ^0.17.0
+  shared_preferences: ^2.0.15
+  flutter_easyloading: ^3.0.5
+  file_picker: ^5.2.2
+  image_picker: ^0.8.6
+  easy_localization: ^3.0.1
 
 dev_dependencies:
   flutter_test:

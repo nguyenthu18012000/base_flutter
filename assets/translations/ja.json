@@ -1,0 +1,11 @@
+{
+  "ui": {
+    "yes": "YES"
+  },
+  "msg": {
+    "success": "success"
+  },
+  "err": {
+    "error": "error"
+  }
+}

@@ -2,17 +2,13 @@ import 'package:flutter_core/flutter_core.dart';
 import '../../../constants/constants.dart';
 import '../models/models.dart';
 
-abstract class EmployeeRemote {
-  Future<Either<Failure, List<EmployeeModel>?>> getEmployees();
-}
-
-class EmployeeRemoteImpl extends EmployeeRemote {
+class EmployeeRemote {
   final AppClient _appClient;
 
-  EmployeeRemoteImpl(this._appClient);
+  EmployeeRemote(this._appClient);
 
   @override
-  Future<Either<Failure, List<EmployeeModel>?>> getEmployees() async {
+  Future<Either<Failure, List<Employee>?>> getEmployees() async {
     final result = await _appClient.call(ApiConstants.getEmployees,
         method: RestfulMethod.get);
 
@@ -20,7 +16,7 @@ class EmployeeRemoteImpl extends EmployeeRemote {
       (l) => Left(l),
       (r) {
         if (r is List) {
-          return Right(r.map((e) => EmployeeModel.fromJson(e)).toList());
+          return Right(r.map((e) => Employee.fromJson(e)).toList());
         }
         return const Right(null);
       },

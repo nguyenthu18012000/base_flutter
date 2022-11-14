@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_core/flutter_core.dart';
 
-import '../../blocs/blocs.dart';
+import '../../bloc/blocs.dart';
 import '../widgets/widgets.dart';
 
 class EmployeePage extends StatelessWidget {

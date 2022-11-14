@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../constants/constants.dart';
-import '../../../domain/domains.dart';
+import '../../datasource/datasources.dart';
 
 class EmployeeItem extends StatelessWidget {
   const EmployeeItem({
