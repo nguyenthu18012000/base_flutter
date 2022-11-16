@@ -64,3 +64,4 @@ In this project, we use the basic Architecture to emplement ***BloC***. We also 
 ## Start your first feature
 
 ## flutter_core
+## CICD
