@@ -59,9 +59,37 @@ In this project, we use the basic Architecture to emplement ***BloC***. We also 
 > More information for BloC. You can read more here: [https://bloclibrary.dev/#/gettingstarted](https://bloclibrary.dev/#/gettingstarted)
 
 ## GetIt and how to manage app instances
+**What is GetIt?**
+> This is a simple Service Locator for Dart and Flutter projects with some additional goodies highly.
+
+For more infomation about GetIt. [https://pub.dev/packages/get_it](https://pub.dev/packages/get_it)
+
+**Why we use GetIt in our project?**
+
+Well, I simply use GetIt in project base for managing all instances in my project, such as: `external`, `datasource`, `bloc`, `page`...
+GetIt will control all of instances in our project, allocate and release the memories when the instance was not used.
+Beside that, We can easily call and use all instance everywhere by `Getit.Intance.get<ObjectType>()`
+
+You should read some code in `lib/dependencies`
 ## Project Structure
-## Code conventions
+When you open the project, you could see many folders and files. But, i think you should just focus on 2 folders when you start: `lib` and `packages/flutter_core`. Espectialy `lib` folders.
+
+**lib**
+Lib is default folder for your application codes. Almost every codes you need to code is inside lib folder.
+
+**Lib folder includes:**
+- **application**: Containts app Architecture. `presentation` layer, `bloc` layer, `datasource` layer.
+All the infomation about 3 layers in app Architecture, I did show you in the previous section **Architecture**,
+You have to make sure that every code for each layer will be in right layer.
+- **configs**: Containts application configs like: Enviroment config, UI config, Dependencies configs...
+  
+- **constants**: Containts many files to save constants in project. I think you should declare more and more constants, because that make your code and your resouce reusable and easy to read.
+- **dependencies**: As I told before. We use GetIt to manage dependencies. Every codes for managing instances will put inside this folder.
+
+
+
 ## Start your first feature
+## Code conventions
 
 ## flutter_core
 ## CICD
