@@ -79,17 +79,20 @@ Lib is default folder for your application codes. Almost every codes you need to
 
 **Lib folder includes:**
 - **application**: Containts app Architecture. `presentation` layer, `bloc` layer, `datasource` layer.
-All the infomation about 3 layers in app Architecture, I did show you in the previous section **Architecture**,
-You have to make sure that every code for each layer will be in right layer.
+All the infomation about 3 layers in app Architecture, I did show you in the previous section **Architecture**,You have to make sure that every code for each layer will be in right layer.
 - **configs**: Containts application configs like: Enviroment config, UI config, Dependencies configs...
-  
 - **constants**: Containts many files to save constants in project. I think you should declare more and more constants, because that make your code and your resouce reusable and easy to read.
 - **dependencies**: As I told before. We use GetIt to manage dependencies. Every codes for managing instances will put inside this folder.
 
-
+**packages/flutter_core**
+- This is a folder that i created in a package format.
+- flutter_core containts all code that not relate to application logic and bussiness.
+- If you are a member, i think you just read flutter_core for understanding more code and learn more about how to write some common code.
+- If you are a tech lead, You will maintain the flutter_core package and sync code with company flutter_core package.
 
 ## Start your first feature
-## Code conventions
 
-## flutter_core
+## Code conventions
 ## CICD
+#### Local CD
+#### CICD with gitlab
