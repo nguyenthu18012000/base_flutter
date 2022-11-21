@@ -33,6 +33,13 @@ Finally, If you want to switch to other enviroment for building a new build. Let
 ```dart
 await AppConfig.instance.configApp(env: Env.dev);
 ```
+#### AppTheme
+Notice that almost every Default Flutter Widgets could be customized in ThemeData.
+To change style for your common components like `primaryColor`, `TextField`, `Button`, `Checkbox`, `appBar`, `card`, `scaford`..., you can open theme_constants.dart and add more code into ThemeConstants Class.
+
+For more infomation about How to style your app. 
+- [https://docs.flutter.dev/cookbook/design/themes](https://docs.flutter.dev/cookbook/design/themes)
+- [https://api.flutter.dev/flutter/material/ThemeData-class.html](https://api.flutter.dev/flutter/material/ThemeData-class.html)
 
 ## Application Architecture
 In this project, we use the basic Architecture to emplement ***BloC***. We also use bloc for state management in our project.
