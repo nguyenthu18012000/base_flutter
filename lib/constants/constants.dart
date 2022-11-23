@@ -1,7 +1,6 @@
 export 'api_constants.dart';
 export 'color_constants.dart';
 export 'enums.dart';
-export 'image_constants.dart';
 export 'locale_constants.dart';
 export 'pref_constants.dart';
 export 'route_constants.dart';

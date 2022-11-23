@@ -17,6 +17,7 @@ class UIConstants {
   static const verticalSpace30 = SizedBox(height: 30);
   static const verticalSpace32 = SizedBox(height: 32);
   static const verticalSpace36 = SizedBox(height: 36);
+  static const verticalSpace44 = SizedBox(height: 44);
   static const verticalSpace48 = SizedBox(height: 48);
   static const verticalSpace64 = SizedBox(height: 64);
   static const verticalSpace66 = SizedBox(height: 66);

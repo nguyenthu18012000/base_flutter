@@ -61,31 +61,34 @@ class _AppScaffoldState<T extends Bloc> extends State<AppScaffold<T>> {
       onWillPop: () => _willPopCallback(),
       child: BlocProvider.value(
         value: bloc!,
-        child: Scaffold(
-          extendBodyBehindAppBar: true,
-          backgroundColor: Colors.white,
-          appBar: widget.title == null
-              ? null
-              : AppBar(
-                  iconTheme: const IconThemeData(
-                    color: Colors.black,
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+          child: Scaffold(
+            extendBodyBehindAppBar: true,
+            backgroundColor: Colors.white,
+            appBar: widget.title == null
+                ? null
+                : AppBar(
+                    iconTheme: const IconThemeData(
+                      color: Colors.black,
+                    ),
+                    elevation: 0.0,
+                    centerTitle: true,
+                    title: widget.title!,
+                    actions: widget.actions,
                   ),
-                  elevation: 0.0,
-                  centerTitle: true,
-                  title: widget.title!,
-                  actions: widget.actions,
-                ),
-          body: SafeArea(
-            top: widget.safeArea,
-            bottom: widget.safeArea,
-            left: widget.safeArea,
-            right: widget.safeArea,
-            child: Padding(
-              padding: widget.padding,
-              child: widget.body,
+            body: SafeArea(
+              top: widget.safeArea,
+              bottom: widget.safeArea,
+              left: widget.safeArea,
+              right: widget.safeArea,
+              child: Padding(
+                padding: widget.padding,
+                child: widget.body,
+              ),
             ),
+            floatingActionButton: widget.floatingActionButton,
           ),
-          floatingActionButton: widget.floatingActionButton,
         ),
       ),
     );

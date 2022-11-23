@@ -1,3 +1,0 @@
-class ImageConstants {
-  ImageConstants._();
-}

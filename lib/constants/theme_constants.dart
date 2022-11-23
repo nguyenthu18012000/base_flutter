@@ -6,7 +6,7 @@ class ThemeConstants {
   ThemeConstants._();
 
   static final inputBorder = OutlineInputBorder(
-    borderSide: const BorderSide(color: ColorConstants.grey),
+    borderSide: const BorderSide(color: ColorConstants.borderInput),
     borderRadius: BorderRadius.circular(8.0),
   );
 
@@ -18,34 +18,55 @@ class ThemeConstants {
       ),
       primarySwatch: ColorConstants.primaryColorSwatch,
       primaryColor: ColorConstants.primary,
-      hintColor: ColorConstants.grey,
+      hintColor: ColorConstants.textBlack3,
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          textStyle: const TextStyle(
+            color: ColorConstants.primary,
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
       inputDecorationTheme: InputDecorationTheme(
-        contentPadding:
-        const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        // contentPadding:
+        // const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
         hintStyle: StyleConstants.mediumText.copyWith(
-          color: ColorConstants.grey,
+          color: ColorConstants.textBlack3,
+          fontWeight: FontWeight.w400,
+          fontSize: 14,
         ),
         focusedBorder: OutlineInputBorder(
           borderSide:
-          const BorderSide(color: ColorConstants.primary, width: 1.5),
-          borderRadius: BorderRadius.circular(5),
+              const BorderSide(color: ColorConstants.primary, width: 0.5),
+          borderRadius: BorderRadius.circular(8),
         ),
         enabledBorder: OutlineInputBorder(
           borderSide:
-          const BorderSide(color: ColorConstants.borderGrey, width: 1.5),
-          borderRadius: BorderRadius.circular(5),
+              const BorderSide(color: ColorConstants.borderInput, width: 0.5),
+          borderRadius: BorderRadius.circular(8),
         ),
         disabledBorder: OutlineInputBorder(
           borderSide:
-          const BorderSide(color: ColorConstants.borderGrey, width: 1.5),
-          borderRadius: BorderRadius.circular(5),
+              const BorderSide(color: ColorConstants.borderInput, width: 0.5),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderSide:
+              const BorderSide(color: ColorConstants.errorRed, width: 0.5),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderSide:
+              const BorderSide(color: ColorConstants.errorRed, width: 0.5),
+          borderRadius: BorderRadius.circular(8),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           shadowColor: Colors.transparent,
           padding: const EdgeInsets.symmetric(
-            vertical: 12,
+            vertical: 18,
             horizontal: 0,
           ),
           onPrimary: ColorConstants.white,
@@ -53,7 +74,7 @@ class ThemeConstants {
           splashFactory: InkRipple.splashFactory,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
-              Radius.circular(5),
+              Radius.circular(8),
             ),
             side: BorderSide(
               color: Colors.transparent,
@@ -76,4 +97,3 @@ class ThemeConstants {
     );
   }
 }
-

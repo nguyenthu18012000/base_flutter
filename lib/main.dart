@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: RouteConfig.instance.routes,
       onGenerateInitialRoutes: (_) => [
         RouteConfig.instance.routeWithName(
-          routeName: RouteConstants.employee,
+          routeName: RouteConstants.login,
         ),
       ],
       builder: EasyLoading.init(),
