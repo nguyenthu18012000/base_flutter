@@ -12,6 +12,7 @@ class ThemeConstants {
 
   static ThemeData get(BuildContext context) {
     return ThemeData(
+      fontFamily: 'SVN-CenturyGothic',
       appBarTheme: const AppBarTheme(
         backgroundColor: ColorConstants.white,
         foregroundColor: ColorConstants.primary,
