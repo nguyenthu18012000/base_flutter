@@ -60,6 +60,27 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    flavorDimensions "flavor-type"
+
+    productFlavors {
+        dev {
+            dimension "flavor-type"
+            applicationId "com.example.base_bloc_flutter.dev"
+            resValue "string", "app_name", "Base Dev"
+        }
+        stg {
+            dimension "flavor-type"
+            applicationId "com.example.base_bloc_flutter.stg"
+            resValue "string", "app_name", "Base Stg"
+        }
+        prod {
+            dimension "flavor-type"
+            applicationId "com.example.base_bloc_flutter"
+            resValue "string", "app_name", "Flutter Base"
+        }
+    }
+
 }
 
 flutter {

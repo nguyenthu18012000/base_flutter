@@ -1,0 +1,81 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "flutter",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "dev",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug",
+            "args": [
+                "--flavor", //flavor name
+                "dev",
+                "-t", // if your have different main file
+                "lib/main-dev.dart"
+            ]
+        },
+        {
+            "name": "stg",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug",
+            "args": [
+                "--flavor", //flavor name
+                "stg",
+                "-t", // if your have different main file
+                "lib/main-stg.dart"
+            ]
+        },
+        {
+            "name": "prod",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug",
+            "args": [
+                "--flavor", //flavor name
+                "prod",
+                "-t", // if your have different main file
+                "lib/main-prod.dart"
+            ]
+        },
+        {
+            "name": "flutter (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "flutter (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "flutter_core",
+            "cwd": "packages/flutter_core",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "flutter_core (profile mode)",
+            "cwd": "packages/flutter_core",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "flutter_core (release mode)",
+            "cwd": "packages/flutter_core",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}
