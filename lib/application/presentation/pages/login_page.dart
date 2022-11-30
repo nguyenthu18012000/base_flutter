@@ -59,7 +59,12 @@ class RegisterWidget extends StatelessWidget {
           'Not have an account yet?',
           style: StyleConstants.largeText,
         ),
-        TextButton(onPressed: () {}, child: const Text('Register')),
+        TextButton(
+            onPressed: () {
+              Navigator.of(context)
+                  .pushNamed(RouteConstants.register,);
+            },
+            child: const Text('Register')),
       ],
     );
   }
