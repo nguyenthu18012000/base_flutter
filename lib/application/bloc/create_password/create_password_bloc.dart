@@ -19,8 +19,6 @@ class CreatePasswordBloc extends Bloc<CreatePasswordEvent, CreatePasswordState> 
   Future<void> _onPress(
       CreateButtonPressed event, Emitter<CreatePasswordState> emit) async {
     final password = event.password;
-   // final passwordConfirm = event.confirmPassword;
-    print(password);
 
 
     emit(state.copyWith( isSuccess: true, password: password));

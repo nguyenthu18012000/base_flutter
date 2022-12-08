@@ -1,5 +1,4 @@
 import 'dart:developer' as dev;
-import 'package:base_bloc_flutter/application/presentation/pages/register/uer_infor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_core/flutter_core.dart';
 
@@ -35,6 +34,14 @@ Future<void> config(GetIt injector) async {
     injector.registerFactory<Widget>(
           () => const UserInforPage(),
       instanceName: RouteConstants.userInforRegister,
+    );
+    injector.registerFactory<Widget>(
+          () => const ForgotPasswordPage(),
+      instanceName: RouteConstants.forgotPassword,
+    );
+    injector.registerFactory<Widget>(
+          () => const CreateNewPasswordPage(),
+      instanceName: RouteConstants.createNewPassword,
     );
   } catch (e) {
     dev.log('Config PageDependencies failed');

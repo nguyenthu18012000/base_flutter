@@ -5,43 +5,40 @@ import '../../../../constants/constants.dart';
 import '../../../../utils/utils.dart';
 import '../../../bloc/blocs.dart';
 
-class CreatePasswordPage extends StatelessWidget {
-  const CreatePasswordPage({super.key});
+class CreateNewPasswordPage extends StatelessWidget {
+  const CreateNewPasswordPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return core.AppScaffold<CreatePasswordBloc>(
-      onLoadData: (bloc) => bloc?.add(CreatePasswordInitial()),
-      body: const CreatePasswordListener(),
+    return const core.AppScaffold<CreateNewPasswordBloc>(
+      body: CreateNewPasswordListener(),
     );
   }
 }
 
-class CreatePasswordListener extends StatelessWidget {
-  const CreatePasswordListener({
+class CreateNewPasswordListener extends StatelessWidget {
+  const CreateNewPasswordListener({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return core.BlocListener<CreatePasswordBloc, CreatePasswordState>(
+    return core.BlocListener<CreateNewPasswordBloc, CreateNewPasswordState>(
       listener: (context, state) {
         if (state.errMessage != null) {
           core.UIHelper.showSnackBar(context, msg: state.errMessage);
         }
         if (state.isSuccess == true) {
-          Navigator.of(context).pushNamed(
-            RouteConstants.userInforRegister,
-          );
+          //
         }
       },
-      child: const CreatePasswordView(),
+      child: const CreateNewPasswordView(),
     );
   }
 }
 
-class CreatePasswordView extends StatelessWidget {
-  const CreatePasswordView({
+class CreateNewPasswordView extends StatelessWidget {
+  const CreateNewPasswordView({
     Key? key,
   }) : super(key: key);
 
@@ -52,14 +49,14 @@ class CreatePasswordView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: const [
           UIConstants.verticalSpace44,
-          Text('Create Password', style: StyleConstants.hugeText),
+          Text('Create New Password', style: StyleConstants.hugeText),
           UIConstants.verticalSpace44,
-          Text('Please create a password for your account',
+          Text('Please create new password for your account',
               style: StyleConstants.mediumText),
           UIConstants.verticalSpace32,
-          PasswordInputForm(),
+          NewPasswordInputForm(),
           UIConstants.verticalSpace44,
-          CreatePasswordButton(),
+          CreateNewPasswordButton(),
           UIConstants.verticalSpace32,
         ],
       ),
@@ -67,8 +64,8 @@ class CreatePasswordView extends StatelessWidget {
   }
 }
 
-class CreatePasswordButton extends StatelessWidget {
-  const CreatePasswordButton({
+class CreateNewPasswordButton extends StatelessWidget {
+  const CreateNewPasswordButton({
     Key? key,
   }) : super(key: key);
 
@@ -76,26 +73,26 @@ class CreatePasswordButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GradientButton(
         onPressed: () {
-          final bloc = context.read<CreatePasswordBloc>();
+          final bloc = context.read<CreateNewPasswordBloc>();
           if (bloc.formCreatePasswordKey.currentState!.validate()) {
-            bloc.add(CreateButtonPressed(password: bloc.password.text));
+            bloc.add(CreatePasswordButtonPressed(password: bloc.password.text));
           }
         },
         child: const Text('Create Password'));
   }
 }
 
-class PasswordInputForm extends StatefulWidget {
-  const PasswordInputForm({super.key});
+class NewPasswordInputForm extends StatefulWidget {
+  const NewPasswordInputForm({super.key});
 
   @override
-  State<PasswordInputForm> createState() => _PasswordInputFormState();
+  State<NewPasswordInputForm> createState() => _NewPasswordInputFormState();
 }
 
-class _PasswordInputFormState extends State<PasswordInputForm> {
+class _NewPasswordInputFormState extends State<NewPasswordInputForm> {
   @override
   Widget build(BuildContext context) {
-    final bloc = context.read<CreatePasswordBloc>();
+    final bloc = context.read<CreateNewPasswordBloc>();
     return Form(
       key: bloc.formCreatePasswordKey,
       child: Column(

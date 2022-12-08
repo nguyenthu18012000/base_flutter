@@ -8,4 +8,6 @@ class RouteConstants {
   static const otpConfirm = '/otp-confirm';
   static const createPassword = '/create-password';
   static const userInforRegister = '/user-infor-register';
+  static const forgotPassword = '/forgot-password';
+  static const createNewPassword = '/create-new-password';
 }

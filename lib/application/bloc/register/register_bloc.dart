@@ -11,13 +11,13 @@ part 'register_state.dart';
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   RegisterBloc() : super(const RegisterState()) {
     on<StartEvent>((event, emit) {});
-    on<RegisterButtonPressed>(_onGetEmployees);
+    on<RegisterButtonPressed>(_onRegisterPhone);
   }
 
   final phoneNumber = TextEditingController();
   final formRegisterKey = GlobalKey<FormState>();
 
-  Future<void> _onGetEmployees(
+  Future<void> _onRegisterPhone(
       RegisterButtonPressed event, Emitter<RegisterState> emit) async {
     emit(state.copyWith(isLoading: true));
     final phoneNumber = event.phone;

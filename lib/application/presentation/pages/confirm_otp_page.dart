@@ -2,8 +2,8 @@ import 'package:base_bloc_flutter/application/bloc/blocs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_core/flutter_core.dart' as core;
 
-import '../../../../constants/constants.dart';
-import '../../../../utils/utils.dart';
+import '../../../constants/constants.dart';
+import '../../../utils/utils.dart';
 
 class OtpConfirmPage extends StatelessWidget {
   const OtpConfirmPage({super.key});
@@ -12,7 +12,11 @@ class OtpConfirmPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return core.AppScaffold<OtpConfirmBloc>(
       onReceiveArguments: (data, bloc) {
-        print(data ?? '');
+        print('data');
+        if (data is OtpConfirmArguments) {
+          bloc?.routeNavigate = data.routeNavigate;
+          bloc?.phoneNumber = data.phoneNumber;
+        }
       },
       onLoadData: (bloc) => bloc?.add(OtpConfirmInitial()),
       body: const OtpConfirmListener(),
@@ -27,6 +31,7 @@ class OtpConfirmListener extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = context.read<OtpConfirmBloc>();
     return core.BlocListener<OtpConfirmBloc, OtpConfirmState>(
       listenWhen: (previous, current) {
         return current.errMessage != null ||
@@ -42,9 +47,7 @@ class OtpConfirmListener extends StatelessWidget {
           core.UIHelper.showSnackBar(context, msg: state.errMessage);
         }
         if (state.isSuccess == true) {
-          Navigator.of(context).pushNamed(
-            RouteConstants.createPassword,
-          );
+          Navigator.of(context).pushNamed(bloc.routeNavigate);
         }
       },
       child: const OtpConfirmView(),
@@ -85,22 +88,7 @@ class PhoneNumberWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String hiddenPhoneNumber(String phone) {
-      int length = phone.length;
-      List<String> listNumber = phone.split("");
-
-      for (int i = 0; i < length; i++) {
-        if (i != 0 &&
-            i != 1 &&
-            i != length - 1 &&
-            i != length - 2 &&
-            i != length - 3) {
-          listNumber[i] = "*";
-        }
-      }
-      return listNumber.join("");
-    }
-
+    final bloc = context.read<OtpConfirmBloc>();
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -109,40 +97,12 @@ class PhoneNumberWidget extends StatelessWidget {
           style: StyleConstants.largeText,
         ),
         TextButton(
-            onPressed: () {}, child: Text(hiddenPhoneNumber('08683499999'))),
+            onPressed: () {},
+            child: Text(bloc.hiddenPhoneNumber(bloc.phoneNumber))),
       ],
     );
   }
 }
-
-// class ResendOtpWidget extends StatefulWidget {
-//   const ResendOtpWidget({Key? key}) : super(key: key);
-//
-//   @override
-//   State<ResendOtpWidget> createState() => _ResendOtpWidgetState();
-// }
-//
-// class _ResendOtpWidgetState extends State<ResendOtpWidget> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Row(
-//       mainAxisAlignment: MainAxisAlignment.center,
-//       children: [
-//         const Text(
-//           'Not received any OTP yet?',
-//           style: StyleConstants.largeText,
-//         ),
-//         TextButton(
-//             onPressed: () {
-//               final bloc = context.read<OtpConfirmBloc>();
-//               bloc.add(OtpResendEvent());
-//             },
-//             child: const Text('Resend OTP')),
-//         Text('(60)'),
-//       ],
-//     );
-//   }
-// }
 
 class ResendWidget extends StatelessWidget {
   const ResendWidget({
@@ -151,11 +111,11 @@ class ResendWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return core.BlocBuilder<OtpConfirmBloc, OtpConfirmState>(
-    //     buildWhen: (pre, cur) {
-    //   return pre.time != cur.time;
-    // }, builder: (context, state) {
-    //   final time = state.time;
+    return core.BlocBuilder<OtpConfirmBloc, OtpConfirmState>(
+        buildWhen: (pre, cur) {
+      return pre.time != cur.time;
+    }, builder: (context, state) {
+      final time = state.time;
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -169,11 +129,11 @@ class ResendWidget extends StatelessWidget {
                 bloc.add(OtpResendEvent());
               },
               child: const Text('Resend OTP')),
-          Text('(time)'),
+          Text('($time)'),
         ],
       );
-    }
-    // );}
+    });
+  }
 }
 
 class ConfirmButton extends StatelessWidget {
@@ -185,6 +145,7 @@ class ConfirmButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GradientButton(
         onPressed: () {
+          FocusScope.of(context).unfocus();
           final bloc = context.read<OtpConfirmBloc>();
           bloc.add(OtpConfirmPressedEvent(otp: bloc.otp));
           // Navigator.of(context)
@@ -244,7 +205,7 @@ class OtpWidget extends StatelessWidget {
             bloc.otp = value;
           },
           onChanged: (value) {
-            bloc.otp =value;
+            bloc.otp = value;
             if (value.length < 6) {}
           },
           beforeTextPaste: (text) {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_core/flutter_core.dart' as core;
 
-
 import '../../../../constants/constants.dart';
 import '../../../../utils/utils.dart';
 import '../../../bloc/blocs.dart';
@@ -40,10 +39,17 @@ class RegisterListener extends StatelessWidget {
           core.UIHelper.showSnackBar(context, msg: state.errMessage);
         }
         if (state.isSuccess == true) {
-          Navigator.of(context).pushNamed(
-            RouteConstants.otpConfirm,
-            arguments: state.phoneNumber
-          );
+          Navigator.of(context).pushNamed(RouteConstants.otpConfirm,
+              arguments: OtpConfirmArguments(
+                phoneNumber: state.phoneNumber??'',
+                routeNavigate: RouteConstants.createPassword,
+                // callback: () {
+                //   Navigator.of(context).pushNamed(
+                //     RouteConstants.createPassword,
+                //     arguments:state.phoneNumber,
+                //   );
+                // },
+              ));
         }
       },
       child: const RegisterView(),

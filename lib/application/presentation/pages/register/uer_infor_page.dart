@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_core/flutter_core.dart' as core;
 
@@ -31,19 +32,19 @@ class UserInforView extends StatelessWidget {
           Text('User information', style: StyleConstants.hugeText),
           UIConstants.verticalSpace44,
           UserInformationForm(),
-          UIConstants.verticalSpace16,
-          ConfirmButton(),
           UIConstants.verticalSpace32,
-
+          PrivacyCheck(),
+          UIConstants.verticalSpace16,
+          ConfirmInforButton(),
+          UIConstants.verticalSpace32,
         ],
       ),
     );
   }
 }
 
-
-class ConfirmButton extends StatelessWidget {
-  const ConfirmButton({
+class ConfirmInforButton extends StatelessWidget {
+  const ConfirmInforButton({
     Key? key,
   }) : super(key: key);
 
@@ -52,11 +53,72 @@ class ConfirmButton extends StatelessWidget {
     return GradientButton(
         onPressed: () {
           final bloc = context.read<UserInforRegisterBloc>();
+          if (bloc.enableSubmit()) {
+            bloc.add(SubmitInforPressedEvent(
+                name: bloc.name.text,
+                dateOfBirth: bloc.dateOfBirth.text,
+                gender: bloc.gender!));
+          }
         },
         child: const Text('Confirm'));
   }
 }
 
+class PrivacyCheck extends StatelessWidget {
+  const PrivacyCheck({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final bloc = context.read<UserInforRegisterBloc>();
+    return core.BlocBuilder<UserInforRegisterBloc, UserInforRegisterState>(
+        buildWhen: (pre, cur) {
+      return pre.isReadPrivacy != cur.isReadPrivacy;
+    }, builder: (context, state) {
+      return Row(
+        children: [
+          InkWell(
+            onTap: () {
+              bloc.add(CheckPrivacyEvent(isChecked: !bloc.isReadPrivacy));
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Icon(
+                state.isReadPrivacy
+                    ? Icons.check_box
+                    : Icons.check_box_outline_blank,
+                color: Colors.blue,
+                size: 28.0,
+              ),
+            ),
+          ),
+          const SizedBox(width: 10.0),
+          Expanded(
+            child: RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                      text: 'I agree with the ',
+                      style: StyleConstants.mediumText
+                          .copyWith(color: Colors.black)),
+                  TextSpan(
+                      text: 'Terms of services',
+                      style: StyleConstants.mediumText
+                          .copyWith(color: Colors.blue),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () async {
+                          FocusManager.instance.primaryFocus?.unfocus();
+                        }),
+                ],
+              ),
+            ),
+          ),
+        ],
+      );
+    });
+  }
+}
 
 class UserInformationForm extends StatefulWidget {
   const UserInformationForm({super.key});
@@ -66,7 +128,6 @@ class UserInformationForm extends StatefulWidget {
 }
 
 class _UserInformationFormState extends State<UserInformationForm> {
-  Gender? gender = Gender.male;
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<UserInforRegisterBloc>();
@@ -79,6 +140,7 @@ class _UserInformationFormState extends State<UserInformationForm> {
           const Text('Name', style: StyleConstants.mediumText),
           UIConstants.verticalSpace4,
           TextFormField(
+            controller: bloc.name,
             enableSuggestions: false,
             autocorrect: false,
             keyboardType: TextInputType.text,
@@ -101,13 +163,13 @@ class _UserInformationFormState extends State<UserInformationForm> {
               Expanded(
                 child: ListTile(
                   contentPadding: const EdgeInsets.all(0),
-                  title: const Text("Male",style: StyleConstants.mediumText),
+                  title: const Text("Male", style: StyleConstants.mediumText),
                   leading: Radio<Gender>(
                     value: Gender.male,
-                    groupValue: gender,
+                    groupValue: bloc.gender,
                     onChanged: (Gender? value) {
                       setState(() {
-                        gender = value;
+                        bloc.gender = value;
                       });
                     },
                   ),
@@ -117,13 +179,13 @@ class _UserInformationFormState extends State<UserInformationForm> {
               Expanded(
                 child: ListTile(
                   contentPadding: const EdgeInsets.all(0),
-                  title: const Text("Female",style: StyleConstants.mediumText),
+                  title: const Text("Female", style: StyleConstants.mediumText),
                   leading: Radio<Gender>(
                     value: Gender.female,
-                    groupValue: gender,
+                    groupValue: bloc.gender,
                     onChanged: (Gender? value) {
                       setState(() {
-                        gender = value;
+                        bloc.gender = value;
                       });
                     },
                   ),
@@ -133,13 +195,13 @@ class _UserInformationFormState extends State<UserInformationForm> {
               Expanded(
                 child: ListTile(
                   contentPadding: const EdgeInsets.all(0),
-                  title: const Text("Other",style: StyleConstants.mediumText),
+                  title: const Text("Other", style: StyleConstants.mediumText),
                   leading: Radio<Gender>(
                     value: Gender.other,
-                    groupValue: gender,
+                    groupValue: bloc.gender,
                     onChanged: (Gender? value) {
                       setState(() {
-                        gender = value;
+                        bloc.gender = value;
                       });
                     },
                   ),
@@ -150,6 +212,7 @@ class _UserInformationFormState extends State<UserInformationForm> {
           const Text('Date of birth', style: StyleConstants.mediumText),
           UIConstants.verticalSpace16,
           TextFormField(
+            controller: bloc.dateOfBirth,
             enableSuggestions: false,
             autocorrect: false,
             keyboardType: TextInputType.datetime,
@@ -170,4 +233,3 @@ class _UserInformationFormState extends State<UserInformationForm> {
     );
   }
 }
-

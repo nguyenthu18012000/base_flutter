@@ -12,6 +12,8 @@ Future<void> config(GetIt injector) async {
     injector.registerFactory<CreatePasswordBloc>(() => CreatePasswordBloc());
     injector.registerFactory<OtpConfirmBloc>(() => OtpConfirmBloc());
     injector.registerFactory<UserInforRegisterBloc>(() => UserInforRegisterBloc());
+    injector.registerFactory<CreateNewPasswordBloc>(() => CreateNewPasswordBloc());
+    injector.registerFactory<ForgotPasswordBloc>(() => ForgotPasswordBloc());
   } catch (e) {
     dev.log('Config BlocDependencies failed');
   }

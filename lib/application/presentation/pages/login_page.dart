@@ -61,8 +61,9 @@ class RegisterWidget extends StatelessWidget {
         ),
         TextButton(
             onPressed: () {
-              Navigator.of(context)
-                  .pushNamed(RouteConstants.register,);
+              Navigator.of(context).pushNamed(
+                RouteConstants.register,
+              );
             },
             child: const Text('Register')),
       ],
@@ -96,7 +97,13 @@ class ForgotPassButton extends StatelessWidget {
     return Row(
       children: [
         const Expanded(child: SizedBox()),
-        TextButton(onPressed: () {}, child: const Text('Forgot Password?')),
+        TextButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed(
+                RouteConstants.forgotPassword,
+              );
+            },
+            child: const Text('Forgot Password?')),
       ],
     );
   }
