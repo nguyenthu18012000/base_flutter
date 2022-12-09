@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "91871249916",
+    "project_id": "tso-dev-c8b89",
+    "storage_bucket": "tso-dev-c8b89.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:91871249916:android:930f7a265b995edf575e79",
+        "android_client_info": {
+          "package_name": "com.example.base_bloc_flutter.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "91871249916-5jmj0fqjl3c569c7ff46f3bgb6irklrq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYbyFToWr96UL6FwiFdPmYcw78HYhRueU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "91871249916-5jmj0fqjl3c569c7ff46f3bgb6irklrq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,3 +1,4 @@
+import 'package:base_bloc_flutter/firebase_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_core/flutter_core.dart';
 
@@ -8,6 +9,7 @@ Future<void> buidApp(Env env) async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   await AppConfig.instance.configApp(env: env);
+  await FirebaseServices.initialize();
   await UserInfo.initUserInfo();
   final startLocale = await LocaleHelper.instance.getDefaultLocale();
   runApp(
