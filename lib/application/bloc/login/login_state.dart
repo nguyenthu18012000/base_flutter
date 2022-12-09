@@ -1,6 +1,26 @@
 part of 'login_bloc.dart';
 
-@immutable
-abstract class LoginState {}
+class LoginState extends Equatable {
+  final String? errMessage;
+  final bool isSuccess;
 
-class LoginInitial extends LoginState {}
+
+  const LoginState({
+    this.isSuccess = false,
+    this.errMessage,
+  });
+
+  LoginState copyWith({
+    bool isSuccess = false,
+    String? errMessage,
+
+  }) {
+    return LoginState(
+        errMessage: errMessage,
+        isSuccess: isSuccess,
+      );
+  }
+
+  @override
+  List<Object?> get props => [errMessage, isSuccess];
+}

@@ -17,7 +17,6 @@ enum RestfulMethod { get, post, put }
 
 class AppClientImpl extends AppClient {
   final Dio? dio;
-
   AppClientImpl({
     this.dio,
   });

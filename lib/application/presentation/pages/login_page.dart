@@ -11,7 +11,29 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const core.AppScaffold<LoginBloc>(
-      body: LoginView(),
+      body: LoginListener(),
+    );
+  }
+}
+
+class LoginListener extends StatelessWidget {
+  const LoginListener({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return core.BlocListener<LoginBloc, LoginState>(
+      listener: (context, state) {
+        if (state.errMessage != null) {
+          core.UIHelper.showSnackBar(context, msg: state.errMessage);
+        }
+        if (state.isSuccess == true) {
+          //
+          print('login ok');
+        }
+      },
+      child: const LoginView(),
     );
   }
 }
@@ -81,7 +103,10 @@ class LoginButton extends StatelessWidget {
     return GradientButton(
         onPressed: () {
           final bloc = context.read<LoginBloc>();
-          bloc.formLoginKey.currentState!.validate();
+          if (bloc.formLoginKey.currentState!.validate()) {
+            bloc.add(LoginButtonPressed(
+                username: bloc.username.text, password: bloc.password.text));
+          }
         },
         child: const Text('Login'));
   }
@@ -126,6 +151,7 @@ class _LoginInputFormState extends State<LoginInputForm> {
         children: <Widget>[
           TextFormField(
             enableSuggestions: false,
+            controller: bloc.username,
             autocorrect: false,
             keyboardType: TextInputType.phone,
             decoration: const InputDecoration(
@@ -142,6 +168,7 @@ class _LoginInputFormState extends State<LoginInputForm> {
           ),
           UIConstants.verticalSpace16,
           TextFormField(
+            controller: bloc.password,
             obscureText: true,
             enableSuggestions: false,
             autocorrect: false,
@@ -163,7 +190,6 @@ class _LoginInputFormState extends State<LoginInputForm> {
         ],
       ),
     );
-    ;
   }
 }
 
