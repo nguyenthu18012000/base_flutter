@@ -33,6 +33,20 @@ Finally, If you want to switch to other enviroment for building a new build. Let
 ```dart
 await AppConfig.instance.configApp(env: Env.dev);
 ```
+#### Flavors
+If you use command line or IDE (VS Code or Android Studio) to run and build app.
+You should use flavors.
+For example, if you use command line:
+Android:
+- `flutter build apk --flavor prod -t lib/main-prod.dart --obfuscate --split-debug-info=./debug`
+- `flutter build apk --flavor stg -t lib/main-stg.dart --obfuscate --split-debug-info=./debug`
+- `flutter build apk --flavor dev -t lib/main-dev.dart --obfuscate --split-debug-info=./debug`
+
+IOS:
+- `flutter build ipa --flavor prod --release --obfuscate --split-debug-info=./debug`
+- `flutter build ipa --flavor stg --release --obfuscate --split-debug-info=./debug`
+- `flutter build ipa --flavor dev --release --obfuscate --split-debug-info=./debug`
+
 #### AppTheme
 Notice that almost every Default Flutter Widgets could be customized in ThemeData.
 To change style for your common components like `primaryColor`, `TextField`, `Button`, `Checkbox`, `appBar`, `card`, `scaford`..., you can open theme_constants.dart and add more code into ThemeConstants Class.
