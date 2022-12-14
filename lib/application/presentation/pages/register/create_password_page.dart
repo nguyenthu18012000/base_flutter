@@ -25,6 +25,10 @@ class CreatePasswordListener extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return core.BlocListener<CreatePasswordBloc, CreatePasswordState>(
+      listenWhen: (previous, current) {
+        return current.errMessage != null ||
+            previous.isSuccess != current.isSuccess;
+      },
       listener: (context, state) {
         if (state.errMessage != null) {
           core.UIHelper.showSnackBar(context, msg: state.errMessage);

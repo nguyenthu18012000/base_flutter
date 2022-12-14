@@ -12,7 +12,6 @@ class OtpConfirmPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return core.AppScaffold<OtpConfirmBloc>(
       onReceiveArguments: (data, bloc) {
-        print('data');
         if (data is OtpConfirmArguments) {
           bloc?.routeNavigate = data.routeNavigate;
           bloc?.phoneNumber = data.phoneNumber;
@@ -35,7 +34,8 @@ class OtpConfirmListener extends StatelessWidget {
     return core.BlocListener<OtpConfirmBloc, OtpConfirmState>(
       listenWhen: (previous, current) {
         return current.errMessage != null ||
-            previous.isLoading != current.isLoading;
+            previous.isLoading != current.isLoading||
+            previous.isSuccess != current.isSuccess;
       },
       listener: (context, state) {
         if (state.isLoading) {

@@ -7,7 +7,6 @@ class LoginRemote {
 
   LoginRemote(this._appClient);
 
-  @override
   Future<Either<Failure, String>> login(LoginRequest loginRequest) async {
     final result = await _appClient.call(ApiConstants.login,
         data: {

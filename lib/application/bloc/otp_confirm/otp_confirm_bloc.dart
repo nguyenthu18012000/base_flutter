@@ -33,14 +33,14 @@ class OtpConfirmBloc extends Bloc<OtpConfirmEvent, OtpConfirmState> {
   String routeNavigate = '';
   String phoneNumber = '';
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  String verificationIDReceived ='';
+  String verificationIDReceived = '';
+  int limitTime = 60;
 
   Future<void> _onRequestOtp(
       OtpConfirmInitial event, Emitter<OtpConfirmState> emit) async {
     emit(state.copyWith(isLoading: true));
-    requestOtp('0868349331');
-    emit(state.copyWith(isLoading: false));
-    int limitTime = 60;
+    await requestOtp('0868349331', emit);
+    // emit(state.copyWith(isLoading: false));
     for (limitTime; limitTime >= 0; limitTime--) {
       await Future.delayed(const Duration(seconds: 1));
       emit(state.copyWith(isLoading: false, time: limitTime));
@@ -49,13 +49,15 @@ class OtpConfirmBloc extends Bloc<OtpConfirmEvent, OtpConfirmState> {
 
   Future<void> _onResendOtp(
       OtpResendEvent event, Emitter<OtpConfirmState> emit) async {
-    emit(state.copyWith(isLoading: true));
-    //request otp
-    emit(state.copyWith(isLoading: false));
-    int limitTime = 60;
-    for (limitTime; limitTime >= 0; limitTime--) {
-      await Future.delayed(const Duration(seconds: 1));
-      emit(state.copyWith(isLoading: false, time: limitTime));
+    if (state.time == 0) {
+      emit(state.copyWith(isLoading: true));
+      await requestOtp(phoneNumber,emit);
+      emit(state.copyWith(isLoading: false));
+      limitTime = 60;
+      for (limitTime; limitTime >= 0; limitTime--) {
+        await Future.delayed(const Duration(seconds: 1));
+        emit(state.copyWith(isLoading: false, time: limitTime));
+      }
     }
   }
 
@@ -67,7 +69,18 @@ class OtpConfirmBloc extends Bloc<OtpConfirmEvent, OtpConfirmState> {
       emit(state.copyWith(isLoading: false, errMessage: 'error otp'));
     } else {
       // verifyOTP(otp);
-      emit(state.copyWith(isLoading: false, isSuccess: true));
+      try {
+        PhoneAuthCredential credential = PhoneAuthProvider.credential(
+            verificationId: verificationIDReceived, smsCode: otp);
+        final result = await _auth.signInWithCredential(credential);
+        if (result.user != null) {
+          print('okk');
+          emit(state.copyWith(isLoading: false, isSuccess: true));
+
+        }
+      } on FirebaseAuthException catch (e) {
+        emit(state.copyWith(isLoading: false, errMessage: e.message));
+      }
     }
   }
 
@@ -86,30 +99,40 @@ class OtpConfirmBloc extends Bloc<OtpConfirmEvent, OtpConfirmState> {
     return listNumber.join("");
   }
 
-  Future<void> requestOtp(String phoneNumber) async {
+  Future<void> requestOtp(
+      String phoneNumber, Emitter<OtpConfirmState> emit) async {
+    String phoneNumberInternational = '+84 ${phoneNumber.substring(1)}';
     await _auth.verifyPhoneNumber(
-      phoneNumber: '+84 868349331',
+      phoneNumber: phoneNumberInternational,
       verificationCompleted: (PhoneAuthCredential credential) async {
-        await _auth.signInWithCredential(credential).then((value){
-          print('successfully');
-        });
+        // await _auth.signInWithCredential(credential).then((value) {
+        //   print('successfully');
+        // });
+        emit(state.copyWith(isLoading: false));
       },
       verificationFailed: (FirebaseAuthException e) {
-        print(e.message);
+        if (e.code == 'invalid-phone-number') {
+          emit(state.copyWith(isLoading: false, errMessage:'The provided phone number is not valid.'));
+        }else{
+          emit(state.copyWith(isLoading: false, errMessage: e.message));
+        }
       },
+
       codeSent: (String verificationId, int? resendToken) async {
         verificationIDReceived = verificationId;
+        emit(state.copyWith(isLoading: false));
       },
       timeout: const Duration(seconds: 60),
       codeAutoRetrievalTimeout: (String verificationId) {},
     );
   }
 
-  void verifyOTP(String smsCode) async {
-    PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationIDReceived, smsCode: smsCode);
-    await _auth.signInWithCredential(credential).then((value){
-      print("You are logged in successfully");
-    });
-  }
+// void verifyOTP(String smsCode) async {
+//   PhoneAuthCredential credential = PhoneAuthProvider.credential(
+//       verificationId: verificationIDReceived, smsCode: smsCode);
+//   await _auth.signInWithCredential(credential).then((value) {
+//     print("You are logged in successfully");
+//     print(value);
+//   });
+// }
 }
-
