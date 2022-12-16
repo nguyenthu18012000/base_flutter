@@ -23,6 +23,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   Future<void> _onPress(
       LoginButtonPressed event, Emitter<LoginState> emit) async {
+    emit(state.copyWith(isLoading: true));
     final loginRequest =
         LoginRequest(username: event.username, password: event.password);
     final result = await _loginRemote.login(loginRequest);

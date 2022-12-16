@@ -1,10 +1,8 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_core/flutter_core.dart';
-import 'package:meta/meta.dart';
 
 part 'otp_confirm_event.dart';
 
@@ -39,7 +37,7 @@ class OtpConfirmBloc extends Bloc<OtpConfirmEvent, OtpConfirmState> {
   Future<void> _onRequestOtp(
       OtpConfirmInitial event, Emitter<OtpConfirmState> emit) async {
     emit(state.copyWith(isLoading: true));
-    await requestOtp('0868349331', emit);
+    await requestOtp(phoneNumber, emit);
     // emit(state.copyWith(isLoading: false));
     for (limitTime; limitTime >= 0; limitTime--) {
       await Future.delayed(const Duration(seconds: 1));
@@ -51,7 +49,7 @@ class OtpConfirmBloc extends Bloc<OtpConfirmEvent, OtpConfirmState> {
       OtpResendEvent event, Emitter<OtpConfirmState> emit) async {
     if (state.time == 0) {
       emit(state.copyWith(isLoading: true));
-      await requestOtp(phoneNumber,emit);
+      await requestOtp(phoneNumber, emit);
       emit(state.copyWith(isLoading: false));
       limitTime = 60;
       for (limitTime; limitTime >= 0; limitTime--) {
@@ -76,7 +74,6 @@ class OtpConfirmBloc extends Bloc<OtpConfirmEvent, OtpConfirmState> {
         if (result.user != null) {
           print('okk');
           emit(state.copyWith(isLoading: false, isSuccess: true));
-
         }
       } on FirebaseAuthException catch (e) {
         emit(state.copyWith(isLoading: false, errMessage: e.message));
@@ -112,12 +109,13 @@ class OtpConfirmBloc extends Bloc<OtpConfirmEvent, OtpConfirmState> {
       },
       verificationFailed: (FirebaseAuthException e) {
         if (e.code == 'invalid-phone-number') {
-          emit(state.copyWith(isLoading: false, errMessage:'The provided phone number is not valid.'));
-        }else{
+          emit(state.copyWith(
+              isLoading: false,
+              errMessage: 'The provided phone number is not valid.'));
+        } else {
           emit(state.copyWith(isLoading: false, errMessage: e.message));
         }
       },
-
       codeSent: (String verificationId, int? resendToken) async {
         verificationIDReceived = verificationId;
         emit(state.copyWith(isLoading: false));
