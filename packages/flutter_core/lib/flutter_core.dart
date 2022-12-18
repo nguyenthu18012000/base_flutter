@@ -14,3 +14,4 @@ export 'package:flutter_easyloading/flutter_easyloading.dart';
 export 'package:file_picker/file_picker.dart';
 export 'package:image_picker/image_picker.dart';
 export 'package:easy_localization/easy_localization.dart';
+export 'package:pin_code_fields/pin_code_fields.dart';

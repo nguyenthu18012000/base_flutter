@@ -23,6 +23,30 @@ Future<void> config(GetIt injector) async {
           () => const ProfilePage(),
       instanceName: RouteConstants.login,
     );
+    injector.registerFactory<Widget>(
+          () => const RegisterPage(),
+      instanceName: RouteConstants.register,
+    );
+    injector.registerFactory<Widget>(
+          () => const OtpConfirmPage(),
+      instanceName: RouteConstants.otpConfirm,
+    );
+    injector.registerFactory<Widget>(
+          () => const CreatePasswordPage(),
+      instanceName: RouteConstants.createPassword,
+    );
+    injector.registerFactory<Widget>(
+          () => const UserInforPage(),
+      instanceName: RouteConstants.userInforRegister,
+    );
+    injector.registerFactory<Widget>(
+          () => const ForgotPasswordPage(),
+      instanceName: RouteConstants.forgotPassword,
+    );
+    injector.registerFactory<Widget>(
+          () => const CreateNewPasswordPage(),
+      instanceName: RouteConstants.createNewPassword,
+    );
   } catch (e) {
     dev.log('Config PageDependencies failed');
   }
