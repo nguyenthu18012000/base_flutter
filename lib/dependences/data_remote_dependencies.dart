@@ -9,6 +9,9 @@ Future<void> config(GetIt injector) async {
     injector.registerLazySingleton<EmployeeRemote>(
       () => EmployeeRemote(injector()),
     );
+    injector.registerLazySingleton<UserProfileRemote>(
+          () => UserProfileRemote(injector()),
+    );
   } catch (e) {
     dev.log('Config ServiceDependencies failed');
   }
