@@ -44,7 +44,7 @@ class UserInforRegisterListener extends StatelessWidget {
           core.UIHelper.showSnackBar(context, msg: state.errMessage);
         }
         if (state.isSuccess == true) {
-         print('ok');
+         core.UIHelper.showSnackBar(context, msg: 'ok');
         }
       },
       child: const UserInforView(),

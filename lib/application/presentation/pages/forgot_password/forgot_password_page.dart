@@ -42,6 +42,12 @@ class ForgotPasswordListener extends StatelessWidget {
               arguments: OtpConfirmArguments(
                 phoneNumber: state.phoneNumber ?? '',
                 routeNavigate: RouteConstants.createNewPassword,
+                callback: (ct) {
+                  Navigator.of(ct).pushNamed(
+                    RouteConstants.createNewPassword,
+                    arguments:state.phoneNumber,
+                  );
+                },
               ));
         }
       },

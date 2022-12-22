@@ -10,8 +10,13 @@ class CreateNewPasswordPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const core.AppScaffold<CreateNewPasswordBloc>(
-      body: CreateNewPasswordListener(),
+    return core.AppScaffold<CreateNewPasswordBloc>(
+      onReceiveArguments: (data, bloc) {
+        if (data is String) {
+          bloc?.phoneNumber = data;
+        }
+      },
+      body: const CreateNewPasswordListener(),
     );
   }
 }
