@@ -15,6 +15,7 @@ class OtpConfirmPage extends StatelessWidget {
         if (data is OtpConfirmArguments) {
           bloc?.routeNavigate = data.routeNavigate;
           bloc?.phoneNumber = data.phoneNumber;
+          bloc?.callBack = data.callback;
         }
       },
       onLoadData: (bloc) => bloc?.add(OtpConfirmInitial()),
@@ -47,7 +48,11 @@ class OtpConfirmListener extends StatelessWidget {
           core.UIHelper.showSnackBar(context, msg: state.errMessage);
         }
         if (state.isSuccess == true) {
-          Navigator.of(context).pushNamed(bloc.routeNavigate);
+          // Navigator.of(context).pushNamed(bloc.routeNavigate);
+          if(bloc.callBack !=null) {
+            bloc.callBack!(context);
+          }
+
         }
       },
       child: const OtpConfirmView(),

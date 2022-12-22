@@ -11,7 +11,7 @@ part 'otp_confirm_state.dart';
 class OtpConfirmArguments {
   final String phoneNumber;
   final String routeNavigate;
-  final void Function()? callback;
+  final void Function(BuildContext)? callback;
 
   OtpConfirmArguments({
     required this.phoneNumber,
@@ -33,6 +33,7 @@ class OtpConfirmBloc extends Bloc<OtpConfirmEvent, OtpConfirmState> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String verificationIDReceived = '';
   int limitTime = 60;
+  Function? callBack;
 
   Future<void> _onRequestOtp(
       OtpConfirmInitial event, Emitter<OtpConfirmState> emit) async {

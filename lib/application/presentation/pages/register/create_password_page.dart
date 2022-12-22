@@ -11,6 +11,11 @@ class CreatePasswordPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return core.AppScaffold<CreatePasswordBloc>(
+      onReceiveArguments: (data, bloc) {
+        if (data is String) {
+          bloc?.phoneNumber = data;
+        }
+      },
       onLoadData: (bloc) => bloc?.add(CreatePasswordInitial()),
       body: const CreatePasswordListener(),
     );
@@ -34,9 +39,11 @@ class CreatePasswordListener extends StatelessWidget {
           core.UIHelper.showSnackBar(context, msg: state.errMessage);
         }
         if (state.isSuccess == true) {
-          Navigator.of(context).pushNamed(
-            RouteConstants.userInforRegister,
-          );
+          final bloc = context.read<CreatePasswordBloc>();
+          Navigator.of(context).pushNamed(RouteConstants.userInforRegister,
+              arguments: UserInforRegisterArguments(
+                  phoneNumber: bloc.phoneNumber,
+                  password: state?.password ?? ''));
         }
       },
       child: const CreatePasswordView(),

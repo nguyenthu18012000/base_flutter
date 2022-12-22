@@ -1,10 +1,7 @@
 import 'package:base_bloc_flutter/application/datasource/datasources.dart';
-import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_core/flutter_core.dart';
 import 'package:meta/meta.dart';
-
-import '../../datasource/remotes/login_remote.dart';
 
 part 'login_event.dart';
 

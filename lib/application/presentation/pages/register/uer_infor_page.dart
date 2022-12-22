@@ -11,8 +11,43 @@ class UserInforPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const core.AppScaffold<UserInforRegisterBloc>(
-      body: UserInforView(),
+    return core.AppScaffold<UserInforRegisterBloc>(
+      onReceiveArguments: (data, bloc) {
+        if (data is UserInforRegisterArguments) {
+          bloc?.phoneNumber = data.phoneNumber;
+          bloc?.password = data.password;
+        }
+      },
+      body: const UserInforView(),
+    );
+  }
+}
+class UserInforRegisterListener extends StatelessWidget {
+  const UserInforRegisterListener({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return core.BlocListener<UserInforRegisterBloc, UserInforRegisterState>(
+      listenWhen: (previous, current) {
+        return current.errMessage != null ||
+            previous.isLoading != current.isLoading;
+      },
+      listener: (context, state) {
+        if (state.isLoading) {
+          core.UIHelper.showLoading();
+        } else {
+          core.UIHelper.hideLoading();
+        }
+        if (state.errMessage != null) {
+          core.UIHelper.showSnackBar(context, msg: state.errMessage);
+        }
+        if (state.isSuccess == true) {
+         print('ok');
+        }
+      },
+      child: const UserInforView(),
     );
   }
 }
@@ -217,13 +252,17 @@ class _UserInformationFormState extends State<UserInformationForm> {
             autocorrect: false,
             keyboardType: TextInputType.datetime,
             decoration: const InputDecoration(
-              hintText: 'yyyy/mm/dd',
+              hintText: 'dd/mm/yyyy',
               suffixIcon: Icon(Icons.calendar_today_outlined),
             ),
-            // The validator receives the text that the user has entered.
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter some text';
+              }
+              try {
+                final DateTime d = core.DateFormat('dd/mm/yyyy').parseStrict(value);
+              } catch (e) {
+                return 'date format:dd/mm/yyyy';
               }
               return null;
             },

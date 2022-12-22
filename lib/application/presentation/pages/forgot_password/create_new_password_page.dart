@@ -29,7 +29,7 @@ class CreateNewPasswordListener extends StatelessWidget {
           core.UIHelper.showSnackBar(context, msg: state.errMessage);
         }
         if (state.isSuccess == true) {
-          //
+            core.UIHelper.showSnackBar(context, msg: 'Change success');
         }
       },
       child: const CreateNewPasswordView(),

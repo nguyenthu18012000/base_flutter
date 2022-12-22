@@ -11,9 +11,9 @@ class ChangePasswordForgotRemote {
       String phoneNumber, String password, String passwordConfirm) async {
     final result = await _appClient.call(ApiConstants.changePasswordForgot,
         data: {
-          // "phoneNumber": phoneNumber,
-          // "password": password
-          // "passwordConfirm": passwordConfirm
+          "phoneNumber": phoneNumber,
+          "password": password,
+          "passwordConfirm": passwordConfirm
         },
         method: RestfulMethod.post);
 
