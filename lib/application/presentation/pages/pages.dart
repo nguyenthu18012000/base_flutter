@@ -4,7 +4,6 @@ export 'login_page.dart';
 export 'user_profile_page.dart';
 export 'register/register_page.dart';
 export 'confirm_otp_page.dart';
-export 'confirm_otp_page.dart';
 export 'register/create_password_page.dart';
 export 'register/uer_infor_page.dart';
 export 'forgot_password/forgot_password_page.dart';

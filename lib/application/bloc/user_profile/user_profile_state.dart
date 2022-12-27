@@ -5,11 +5,7 @@ import '../../datasource/models/user.dart';
 class ProfileState {
   final User user;
   final bool isCurrentUser;
-  final String avatarPath;
   final String userDescription;
-
-  String get username => user.username;
-  String get email => user.email;
 
   final FormSubmissionStatus formStatus;
   bool imageSourceActionSheetIsVisible;

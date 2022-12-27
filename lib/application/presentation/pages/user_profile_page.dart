@@ -1,9 +1,15 @@
 import 'dart:io';
+import 'package:base_bloc_flutter/application/presentation/pages/pages.dart';
+import 'package:base_bloc_flutter/constants/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_core/flutter_core.dart' as core;
 
+import '../../../constants/ui_constants.dart';
+import '../../../gen/assets.gen.dart';
+import '../../../utils/image_helper.dart';
 import '../../bloc/user_profile/user_profile_bloc.dart';
 import '../../bloc/user_profile/user_profile_event.dart';
 import '../../bloc/user_profile/user_profile_state.dart';
@@ -13,74 +19,87 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sessionCubit = context.read<SessionCubit>();
-    return BlocProvider(
-      create: (context) => ProfileBloc(
-        dataRepo: context.read<DataRepository>(),
-        storageRepo: context.read<StorageRepository>(),
-        user: sessionCubit.selectedUser ?? sessionCubit.currentUser,
-        isCurrentUser: sessionCubit.isCurrentUserSelected,
-      ),
-      child: BlocListener<ProfileBloc, ProfileState>(
-        listener: (context, state) {
-          if (state.imageSourceActionSheetIsVisible) {
-            _showImageSourceActionSheet(context);
-          }
-        },
-        child: Scaffold(
-          backgroundColor: Color(0xFFF2F2F7),
-          appBar: _appBar(),
-          body: _profilePage(),
-        ),
-      ),
+    return core.AppScaffold<ProfileBloc>(
+      onReceiveArguments: (data, bloc) {},
+      isBack: true,
+      onLoadData: (bloc) => bloc?.add,
+      body: const ProfileListener(),
     );
   }
+}
 
-  Widget _appBar() {
-    final appBarHeight = AppBar().preferredSize.height;
-    return PreferredSize(
-      preferredSize: Size.fromHeight(appBarHeight),
-      child: BlocBuilder<ProfileBloc, ProfileState>(builder: (context, state) {
-        return AppBar(
-          title: const Text('Profile'),
-          actions: [
-            if (state.isCurrentUser)
-              IconButton(
-                icon: const Icon(Icons.logout),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
+class ProfileListener extends StatelessWidget {
+  const ProfileListener({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final bloc = context.read<ProfileBloc>();
+    return core.BlocListener<ProfileBloc, ProfileState>(
+      listener: (context, state) {
+        if (state.imageSourceActionSheetIsVisible) {
+          _showImageSourceActionSheet(context);
+        }
+      },
+      child: const ProfileView(),
+    );
+  }
+}
+
+class ProfileView extends StatelessWidget {
+  const ProfileView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Center(
+        child: Column(
+          children: const [
+            UIConstants.verticalSpace24,
+            AvatarWidget(),
+            UIConstants.verticalSpace12,
+            UserNameTileWidget(),
+            UIConstants.verticalSpace4,
+            Text("Edit",
+                style: TextStyle(
+                    fontSize: 16,
+                    color: ColorConstants.gradientTextEdit,
+                    fontWeight: FontWeight.w600)),
+            PhoneNumberProfileWidget(),
+            Divider(
+              height: 1,
+              color: ColorConstants.textBlack3,
+            ),
+            DateOfBirthWidget(),
+            Divider(
+              height: 1,
+              color: ColorConstants.textBlack3,
+            ),
+            GenderWidget(),
+            Divider(
+              height: 1,
+              color: ColorConstants.textBlack3,
+            ),
+            LanguageWidget(),
+            ChangePasswordButtonWidget()
           ],
-        );
-      }),
+        ),
+      ),
     );
   }
+}
 
-  Widget _profilePage() {
-    return BlocBuilder<ProfileBloc, ProfileState>(builder: (context, state) {
-      return SafeArea(
-        child: Center(
-          child: Column(
-            children: [
-              const SizedBox(height: 30),
-              _avatar(),
-              if (state.isCurrentUser) _changeAvatarButton(),
-              const SizedBox(height: 30),
-              _usernameTile(),
-              _emailTile(),
-              _descriptionTile(),
-              if (state.isCurrentUser) _saveProfileChangesButton(),
-            ],
-          ),
-        ),
-      );
-    });
-  }
+class AvatarWidget extends StatelessWidget {
+  const AvatarWidget({Key? key}) : super(key: key);
 
-  Widget _avatar() {
-    return BlocBuilder<ProfileBloc, ProfileState>(builder: (context, state) {
-      return state.avatarPath == null
+  @override
+  Widget build(BuildContext context) {
+    return core.BlocBuilder<ProfileBloc, ProfileState>(buildWhen: (pre, cur) {
+      return pre.user.avatarPath != cur.user.avatarPath;
+    }, builder: (context, state) {
+      final avatarPath = state.user.avatarPath;
+      return avatarPath == null
           ? Container(
         decoration: const BoxDecoration(
           shape: BoxShape.circle,
@@ -95,127 +114,245 @@ class ProfilePage extends StatelessWidget {
       )
           : CircleAvatar(
         radius: 50,
-        backgroundImage: NetworkImage(state.avatarPath),
+        backgroundImage: NetworkImage(avatarPath ?? ''),
       );
     });
   }
+}
 
-  Widget _changeAvatarButton() {
-    return BlocBuilder<ProfileBloc, ProfileState>(builder: (context, state) {
-      return TextButton(
-        onPressed: () => context.read<ProfileBloc>().add(ChangeAvatarRequest()),
-        child: const Text('Change Avatar'),
+class UserNameTileWidget extends StatelessWidget {
+  const UserNameTileWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return core.BlocBuilder<ProfileBloc, ProfileState>(buildWhen: (pre, cur) {
+      return pre.user.name != cur.user.name;
+    }, builder: (context, state) {
+      return Text(
+        state.user.name ?? '',
+        style: const TextStyle(
+            fontSize: 20,
+            color: ColorConstants.textBlack,
+            fontWeight: FontWeight.w700),
       );
     });
   }
+}
 
-  Widget _usernameTile() {
-    return BlocBuilder<ProfileBloc, ProfileState>(builder: (context, state) {
-      return ListTile(
-        tileColor: Colors.white,
-        leading: const Icon(Icons.person),
-        title: Text(state.username),
-      );
-    });
-  }
+class PhoneNumberProfileWidget extends StatelessWidget {
+  const PhoneNumberProfileWidget({Key? key}) : super(key: key);
 
-  Widget _emailTile() {
-    return BlocBuilder<ProfileBloc, ProfileState>(builder: (context, state) {
-      return ListTile(
-        tileColor: Colors.white,
-        leading: const Icon(Icons.mail),
-        title: Text(state.email),
-      );
-    });
-  }
-
-  Widget _descriptionTile() {
-    return BlocBuilder<ProfileBloc, ProfileState>(builder: (context, state) {
-      return ListTile(
-        tileColor: Colors.white,
-        leading: const Icon(Icons.edit),
-        title: TextFormField(
-          initialValue: state.userDescription,
-          decoration: InputDecoration.collapsed(
-              hintText: state.isCurrentUser
-                  ? 'Say something about yourself'
-                  : 'This user hasn\'t updated their profile'),
-          maxLines: null,
-          readOnly: !state.isCurrentUser,
-          toolbarOptions: ToolbarOptions(
-            copy: state.isCurrentUser,
-            cut: state.isCurrentUser,
-            paste: state.isCurrentUser,
-            selectAll: state.isCurrentUser,
+  @override
+  Widget build(BuildContext context) {
+    return core.BlocBuilder<ProfileBloc, ProfileState>(buildWhen: (pre, cur) {
+      return pre.user.phoneNumber != cur.user.phoneNumber;
+    }, builder: (context, state) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            "Phone number",
+            style: TextStyle(
+                fontSize: 16,
+                color: ColorConstants.labelUser,
+                fontWeight: FontWeight.w400),
           ),
-          onChanged: (value) => context
-              .read<ProfileBloc>()
-              .add(ProfileDescriptionChanged(description: value)),
-        ),
+          Text(
+            "${state.user.phoneNumber}",
+            style: const TextStyle(
+                fontSize: 16,
+                color: ColorConstants.textBlack,
+                fontWeight: FontWeight.w600),
+          ),
+        ],
       );
     });
   }
+}
 
-  Widget _saveProfileChangesButton() {
-    return BlocBuilder<ProfileBloc, ProfileState>(builder: (context, state) {
-      return ElevatedButton(
-        onPressed: () {},
-        child: const Text('Save Changes'),
+class DateOfBirthWidget extends StatelessWidget {
+  const DateOfBirthWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return core.BlocBuilder<ProfileBloc, ProfileState>(buildWhen: (pre, cur) {
+      return pre.user.dateOfBirth != cur.user.dateOfBirth;
+    }, builder: (context, state) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            "Date of Birth",
+            style: TextStyle(
+                fontSize: 16,
+                color: ColorConstants.labelUser,
+                fontWeight: FontWeight.w400),
+          ),
+          Text(
+            "${state.user.dateOfBirth}",
+            style: const TextStyle(
+                fontSize: 16,
+                color: ColorConstants.textBlack,
+                fontWeight: FontWeight.w600),
+          ),
+        ],
       );
     });
   }
+}
 
-  void _showImageSourceActionSheet(BuildContext context) {
-    selectImageSource(imageSource) {
-      context
-          .read<ProfileBloc>()
-          .add(OpenImagePicker(imageSource: imageSource));
-    }
+class GenderWidget extends StatelessWidget {
+  const GenderWidget({Key? key}) : super(key: key);
 
-    if (Platform.isIOS) {
-      showCupertinoModalPopup(
-        context: context,
-        builder: (context) => CupertinoActionSheet(
-          actions: [
-            CupertinoActionSheetAction(
-              child: const Text('Camera'),
-              onPressed: () {
+  @override
+  Widget build(BuildContext context) {
+    return core.BlocBuilder<ProfileBloc, ProfileState>(buildWhen: (pre, cur) {
+      return pre.user.gender != cur.user.gender;
+    }, builder: (context, state) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            "Gender",
+            style: TextStyle(
+                fontSize: 16,
+                color: ColorConstants.labelUser,
+                fontWeight: FontWeight.w400),
+          ),
+          Row(
+            children: [
+              const Icon(
+                Icons.male,
+                size: 20,
+              ),
+              Text(
+                "${state.user.gender}",
+                style: const TextStyle(
+                    fontSize: 16,
+                    color: ColorConstants.textBlack,
+                    fontWeight: FontWeight.w600),
+              ),
+            ],
+          ),
+        ],
+      );
+    });
+  }
+}
+
+class LanguageWidget extends StatelessWidget {
+  const LanguageWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return core.BlocBuilder<ProfileBloc, ProfileState>(buildWhen: (pre, cur) {
+      return pre.user.language != cur.user.language;
+    }, builder: (context, state) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            "Gender",
+            style: TextStyle(
+                fontSize: 16,
+                color: ColorConstants.labelUser,
+                fontWeight: FontWeight.w400),
+          ),
+          Row(
+            children: [
+              Image.asset(Assets.images.fagForJapan),
+              Text(
+                "${state.user.language}",
+                style: const TextStyle(
+                    fontSize: 16,
+                    color: ColorConstants.textBlack,
+                    fontWeight: FontWeight.w600),
+              ),
+              const Icon(Icons.arrow_forward_ios,color: ColorConstants.gradientRight,)
+            ],
+          ),
+        ],
+      );
+    });
+  }
+}
+
+class ChangePasswordButtonWidget extends StatelessWidget {
+  const ChangePasswordButtonWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: OutlinedButton(
+        onPressed: () {
+          debugPrint('Received click');
+        },
+        child: const Text('Change Password'),
+      ),
+    );
+  }
+}
+
+Widget _saveProfileChangesButton() {
+  return BlocBuilder<ProfileBloc, ProfileState>(builder: (context, state) {
+    return ElevatedButton(
+      onPressed: () {},
+      child: const Text('Save Changes'),
+    );
+  });
+}
+
+void _showImageSourceActionSheet(BuildContext context) {
+  selectImageSource(imageSource) {
+    context.read<ProfileBloc>().add(OpenImagePicker(imageSource: imageSource));
+  }
+
+  if (Platform.isIOS) {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (context) =>
+          CupertinoActionSheet(
+            actions: [
+              CupertinoActionSheetAction(
+                child: const Text('Camera'),
+                onPressed: () {
+                  Navigator.pop(context);
+                  selectImageSource(ImageSource.camera);
+                },
+              ),
+              CupertinoActionSheetAction(
+                child: const Text('Gallery'),
+                onPressed: () {
+                  Navigator.pop(context);
+                  selectImageSource(ImageSource.gallery);
+                },
+              )
+            ],
+          ),
+    );
+  } else {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) =>
+          Wrap(children: [
+            ListTile(
+              leading: const Icon(Icons.camera_alt),
+              title: const Text('Camera'),
+              onTap: () {
                 Navigator.pop(context);
                 selectImageSource(ImageSource.camera);
               },
             ),
-            CupertinoActionSheetAction(
-              child: const Text('Gallery'),
-              onPressed: () {
+            ListTile(
+              leading: const Icon(Icons.photo_album),
+              title: const Text('Gallery'),
+              onTap: () {
                 Navigator.pop(context);
                 selectImageSource(ImageSource.gallery);
               },
-            )
-          ],
-        ),
-      );
-    } else {
-      showModalBottomSheet(
-        context: context,
-        builder: (context) => Wrap(children: [
-          ListTile(
-            leading: const Icon(Icons.camera_alt),
-            title: const Text('Camera'),
-            onTap: () {
-              Navigator.pop(context);
-              selectImageSource(ImageSource.camera);
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.photo_album),
-            title: const Text('Gallery'),
-            onTap: () {
-              Navigator.pop(context);
-              selectImageSource(ImageSource.gallery);
-            },
-          ),
-        ]),
-      );
-    }
+            ),
+          ]),
+    );
   }
 }

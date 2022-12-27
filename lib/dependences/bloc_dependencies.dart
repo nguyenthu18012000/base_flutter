@@ -14,7 +14,7 @@ Future<void> config(GetIt injector) async {
     injector.registerFactory<UserInforRegisterBloc>(() => UserInforRegisterBloc());
     injector.registerFactory<CreateNewPasswordBloc>(() => CreateNewPasswordBloc(injector()));
     injector.registerFactory<ForgotPasswordBloc>(() => ForgotPasswordBloc());
-    injector.registerFactory<ProfileBloc>(() => ProfileBloc(dataRepo: dataRepo, storageRepo: storageRepo, user: user, isCurrentUser: isCurrentUser));
+    injector.registerFactory<ProfileBloc>(() => ProfileBloc());
   } catch (e) {
     dev.log('Config BlocDependencies failed');
   }

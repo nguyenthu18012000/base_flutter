@@ -21,7 +21,7 @@ Future<void> config(GetIt injector) async {
     );
     injector.registerFactory<Widget>(
           () => const ProfilePage(),
-      instanceName: RouteConstants.login,
+      instanceName: RouteConstants.userProfile,
     );
     injector.registerFactory<Widget>(
           () => const RegisterPage(),
