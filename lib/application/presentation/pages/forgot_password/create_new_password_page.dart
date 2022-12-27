@@ -10,8 +10,13 @@ class CreateNewPasswordPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const core.AppScaffold<CreateNewPasswordBloc>(
-      body: CreateNewPasswordListener(),
+    return core.AppScaffold<CreateNewPasswordBloc>(
+      onReceiveArguments: (data, bloc) {
+        if (data is String) {
+          bloc?.phoneNumber = data;
+        }
+      },
+      body: const CreateNewPasswordListener(),
     );
   }
 }
@@ -29,7 +34,7 @@ class CreateNewPasswordListener extends StatelessWidget {
           core.UIHelper.showSnackBar(context, msg: state.errMessage);
         }
         if (state.isSuccess == true) {
-          //
+            core.UIHelper.showSnackBar(context, msg: 'Change success');
         }
       },
       child: const CreateNewPasswordView(),

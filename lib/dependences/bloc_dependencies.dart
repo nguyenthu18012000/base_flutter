@@ -11,8 +11,10 @@ Future<void> config(GetIt injector) async {
     injector.registerFactory<RegisterBloc>(() => RegisterBloc());
     injector.registerFactory<CreatePasswordBloc>(() => CreatePasswordBloc());
     injector.registerFactory<OtpConfirmBloc>(() => OtpConfirmBloc());
-    injector.registerFactory<UserInforRegisterBloc>(() => UserInforRegisterBloc());
-    injector.registerFactory<CreateNewPasswordBloc>(() => CreateNewPasswordBloc(injector()));
+    injector.registerFactory<UserInforRegisterBloc>(
+        () => UserInforRegisterBloc(injector()));
+    injector.registerFactory<CreateNewPasswordBloc>(
+        () => CreateNewPasswordBloc(injector()));
     injector.registerFactory<ForgotPasswordBloc>(() => ForgotPasswordBloc());
     injector.registerFactory<ProfileBloc>(() => ProfileBloc());
   } catch (e) {

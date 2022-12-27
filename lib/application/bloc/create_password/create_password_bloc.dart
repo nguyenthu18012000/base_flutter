@@ -15,6 +15,7 @@ class CreatePasswordBloc extends Bloc<CreatePasswordEvent, CreatePasswordState> 
   final formCreatePasswordKey = GlobalKey<FormState>();
   final password = TextEditingController();
   final passwordConfirm = TextEditingController();
+  String phoneNumber = '';
 
   Future<void> _onPress(
       CreateButtonPressed event, Emitter<CreatePasswordState> emit) async {
@@ -22,6 +23,5 @@ class CreatePasswordBloc extends Bloc<CreatePasswordEvent, CreatePasswordState> 
     final password = event.password;
 
     emit(state.copyWith( isSuccess: true, password: password));
-    print(state.isSuccess);
   }
 }

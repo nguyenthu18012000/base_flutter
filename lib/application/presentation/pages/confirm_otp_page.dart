@@ -1,4 +1,5 @@
 import 'package:base_bloc_flutter/application/bloc/blocs.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_core/flutter_core.dart' as core;
 
@@ -15,6 +16,7 @@ class OtpConfirmPage extends StatelessWidget {
         if (data is OtpConfirmArguments) {
           bloc?.routeNavigate = data.routeNavigate;
           bloc?.phoneNumber = data.phoneNumber;
+          bloc?.callBack = data.callback;
         }
       },
       onLoadData: (bloc) => bloc?.add(OtpConfirmInitial()),
@@ -34,7 +36,7 @@ class OtpConfirmListener extends StatelessWidget {
     return core.BlocListener<OtpConfirmBloc, OtpConfirmState>(
       listenWhen: (previous, current) {
         return current.errMessage != null ||
-            previous.isLoading != current.isLoading||
+            previous.isLoading != current.isLoading ||
             previous.isSuccess != current.isSuccess;
       },
       listener: (context, state) {
@@ -47,7 +49,11 @@ class OtpConfirmListener extends StatelessWidget {
           core.UIHelper.showSnackBar(context, msg: state.errMessage);
         }
         if (state.isSuccess == true) {
-          Navigator.of(context).pushNamed(bloc.routeNavigate);
+          // Navigator.of(context).pushNamed(bloc.routeNavigate);
+          if(bloc.callBack !=null) {
+            bloc.callBack!(context);
+          }
+
         }
       },
       child: const OtpConfirmView(),

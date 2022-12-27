@@ -43,12 +43,12 @@ class RegisterListener extends StatelessWidget {
               arguments: OtpConfirmArguments(
                 phoneNumber: state.phoneNumber??'',
                 routeNavigate: RouteConstants.createPassword,
-                // callback: () {
-                //   Navigator.of(context).pushNamed(
-                //     RouteConstants.createPassword,
-                //     arguments:state.phoneNumber,
-                //   );
-                // },
+                callback: (ct) {
+                  Navigator.of(ct).pushNamed(
+                    RouteConstants.createPassword,
+                    arguments:state.phoneNumber,
+                  );
+                },
               ));
         }
       },

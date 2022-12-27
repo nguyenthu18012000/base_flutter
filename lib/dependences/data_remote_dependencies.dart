@@ -13,6 +13,12 @@ Future<void> config(GetIt injector) async {
     injector.registerLazySingleton<LoginRemote>(
           () => LoginRemote(injector()),
     );
+    injector.registerLazySingleton<ChangePasswordForgotRemote>(
+          () => ChangePasswordForgotRemote(injector()),
+    );
+    injector.registerLazySingleton<RegisterRemote>(
+          () => RegisterRemote(injector()),
+    );
 
     injector.registerLazySingleton<UserProfileRemote>(
           () => UserProfileRemote(injector()),

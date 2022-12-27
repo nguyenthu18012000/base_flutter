@@ -7,20 +7,20 @@ class ChangePasswordForgotRemote {
 
   ChangePasswordForgotRemote(this._appClient);
 
-  Future<Either<Failure, String>> changePasswordForgot(
+  Future<Either<Failure, int>> changePasswordForgot(
       String phoneNumber, String password, String passwordConfirm) async {
     final result = await _appClient.call(ApiConstants.changePasswordForgot,
         data: {
-          // "phoneNumber": phoneNumber,
-          // "password": password
-          // "passwordConfirm": passwordConfirm
+          "username": phoneNumber,
+          "newPassword": password,
+          "confirmNewPassword": passwordConfirm
         },
         method: RestfulMethod.post);
 
     return result.fold(
       (l) => Left(l),
       (r) {
-        return Right(r);
+        return const Right(1);
       },
     );
   }
