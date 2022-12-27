@@ -73,7 +73,6 @@ class OtpConfirmBloc extends Bloc<OtpConfirmEvent, OtpConfirmState> {
             verificationId: verificationIDReceived, smsCode: otp);
         final result = await _auth.signInWithCredential(credential);
         if (result.user != null) {
-          print('okk');
           emit(state.copyWith(isLoading: false, isSuccess: true));
         }
       } on FirebaseAuthException catch (e) {
