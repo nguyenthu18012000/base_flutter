@@ -104,6 +104,8 @@ class PasswordInputForm extends StatefulWidget {
 }
 
 class _PasswordInputFormState extends State<PasswordInputForm> {
+  bool _hidePassword = true;
+  bool _hidePasswordConfirm = true;
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<CreatePasswordBloc>();
@@ -115,11 +117,20 @@ class _PasswordInputFormState extends State<PasswordInputForm> {
             controller: bloc.password,
             enableSuggestions: false,
             autocorrect: false,
-            obscureText: true,
+            obscureText: _hidePassword,
             keyboardType: TextInputType.text,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               hintText: 'Enter your new password',
               prefixIcon: Icon(Icons.lock_outline),
+              suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _hidePassword = !_hidePassword;
+                    });
+                  },
+                  icon: _hidePassword
+                      ? Icon(Icons.remove_red_eye_outlined)
+                      : Icon(Icons.visibility_off_sharp)),
             ),
             // The validator receives the text that the user has entered.
             validator: (value) {
@@ -134,11 +145,20 @@ class _PasswordInputFormState extends State<PasswordInputForm> {
             controller: bloc.passwordConfirm,
             enableSuggestions: false,
             autocorrect: false,
-            obscureText: true,
+            obscureText: _hidePasswordConfirm,
             keyboardType: TextInputType.text,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               hintText: 'Re-enter password',
               prefixIcon: Icon(Icons.lock_outline),
+              suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _hidePasswordConfirm = !_hidePasswordConfirm;
+                    });
+                  },
+                  icon: _hidePasswordConfirm
+                      ? Icon(Icons.remove_red_eye_outlined)
+                      : Icon(Icons.visibility_off_sharp)),
             ),
             // The validator receives the text that the user has entered.
             validator: (value) {

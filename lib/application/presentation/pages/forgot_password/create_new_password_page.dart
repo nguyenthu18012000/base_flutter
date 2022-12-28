@@ -30,6 +30,11 @@ class CreateNewPasswordListener extends StatelessWidget {
   Widget build(BuildContext context) {
     return core.BlocListener<CreateNewPasswordBloc, CreateNewPasswordState>(
       listener: (context, state) {
+        if (state.isLoading) {
+          core.UIHelper.showLoading();
+        } else {
+          core.UIHelper.hideLoading();
+        }
         if (state.errMessage != null) {
           core.UIHelper.showSnackBar(context, msg: state.errMessage);
         }
@@ -81,10 +86,13 @@ class CreateNewPasswordButton extends StatelessWidget {
     return GradientButton(
         onPressed: () {
           final bloc = context.read<CreateNewPasswordBloc>();
+          FocusScope.of(context).unfocus();
           if (bloc.formCreatePasswordKey.currentState!.validate()) {
             bloc.add(CreatePasswordButtonPressed(password: bloc.password.text));
           }
         },
+
+
         child: const Text('Create Password'));
   }
 }
@@ -97,6 +105,8 @@ class NewPasswordInputForm extends StatefulWidget {
 }
 
 class _NewPasswordInputFormState extends State<NewPasswordInputForm> {
+  bool _hidePassword = true;
+  bool _hidePasswordConfirm = true;
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<CreateNewPasswordBloc>();
@@ -108,11 +118,20 @@ class _NewPasswordInputFormState extends State<NewPasswordInputForm> {
             controller: bloc.password,
             enableSuggestions: false,
             autocorrect: false,
-            obscureText: true,
+            obscureText: _hidePassword,
             keyboardType: TextInputType.text,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               hintText: 'Enter your new password',
               prefixIcon: Icon(Icons.lock_outline),
+              suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _hidePassword = !_hidePassword;
+                    });
+                  },
+                  icon: _hidePassword
+                      ? Icon(Icons.remove_red_eye_outlined)
+                      : Icon(Icons.visibility_off_sharp)),
             ),
             // The validator receives the text that the user has entered.
             validator: (value) {
@@ -127,11 +146,20 @@ class _NewPasswordInputFormState extends State<NewPasswordInputForm> {
             controller: bloc.passwordConfirm,
             enableSuggestions: false,
             autocorrect: false,
-            obscureText: true,
+            obscureText: _hidePasswordConfirm,
             keyboardType: TextInputType.text,
-            decoration: const InputDecoration(
+            decoration:  InputDecoration(
               hintText: 'Re-enter password',
               prefixIcon: Icon(Icons.lock_outline),
+              suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _hidePasswordConfirm = !_hidePasswordConfirm;
+                    });
+                  },
+                  icon: _hidePasswordConfirm
+                      ? Icon(Icons.remove_red_eye_outlined)
+                      : Icon(Icons.visibility_off_sharp)),
             ),
             // The validator receives the text that the user has entered.
             validator: (value) {

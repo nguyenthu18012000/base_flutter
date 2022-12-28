@@ -5,6 +5,7 @@ class GradientButton extends StatelessWidget {
   final BorderRadiusGeometry? borderRadius;
   final double? width;
   final double height;
+  final bool enable;
   final Gradient gradient;
   final VoidCallback? onPressed;
   final Widget child;
@@ -15,6 +16,7 @@ class GradientButton extends StatelessWidget {
     required this.child,
     this.borderRadius,
     this.width,
+    this.enable = true,
     this.height = 52.0,
     this.gradient = const LinearGradient(
         colors: [ColorConstants.gradientLeft, ColorConstants.gradientRight]),
@@ -31,13 +33,13 @@ class GradientButton extends StatelessWidget {
           borderRadius: borderRadius,
           color: Colors.amberAccent),
       child: ElevatedButton(
-        onPressed: onPressed,
+        onPressed: enable ? onPressed : null,
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.resolveWith<Color>(
             (Set<MaterialState> states) {
-              if (states.contains(MaterialState.pressed)) {
+              if (enable) {
                 return Colors.transparent;
-              } else if (states.contains(MaterialState.disabled)) {
+              } else if (!enable) {
                 return Colors.white.withOpacity(0.6);
               }
               return Colors.transparent;

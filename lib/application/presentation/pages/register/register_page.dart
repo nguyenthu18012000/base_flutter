@@ -98,7 +98,9 @@ class LoginWidget extends StatelessWidget {
           'Already have an account?',
           style: StyleConstants.largeText,
         ),
-        TextButton(onPressed: () {}, child: const Text('Login')),
+        TextButton(onPressed: () {
+          Navigator.of(context).pop();
+        }, child: const Text('Login')),
       ],
     );
   }

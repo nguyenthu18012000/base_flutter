@@ -35,7 +35,7 @@ class OtpConfirmListener extends StatelessWidget {
     return core.BlocListener<OtpConfirmBloc, OtpConfirmState>(
       listenWhen: (previous, current) {
         return current.errMessage != null ||
-            previous.isLoading != current.isLoading||
+            previous.isLoading != current.isLoading ||
             previous.isSuccess != current.isSuccess;
       },
       listener: (context, state) {
@@ -49,10 +49,9 @@ class OtpConfirmListener extends StatelessWidget {
         }
         if (state.isSuccess == true) {
           // Navigator.of(context).pushNamed(bloc.routeNavigate);
-          if(bloc.callBack !=null) {
+          if (bloc.callBack != null) {
             bloc.callBack!(context);
           }
-
         }
       },
       child: const OtpConfirmView(),
@@ -128,12 +127,25 @@ class ResendWidget extends StatelessWidget {
             'Not received any OTP yet?',
             style: StyleConstants.largeText,
           ),
-          TextButton(
-              onPressed: () {
+          InkWell(
+              onTap: () {
                 final bloc = context.read<OtpConfirmBloc>();
                 bloc.add(OtpResendEvent());
               },
-              child: const Text('Resend OTP')),
+              child: Text(
+                ' Resend OTP',
+                style: time > 0
+                    ? const TextStyle(
+                        color: Colors.grey, fontWeight: FontWeight.bold)
+                    : const TextStyle(
+                        color: Colors.blue, fontWeight: FontWeight.bold),
+              )),
+          // TextButton(
+          //     onPressed: () {
+          //       final bloc = context.read<OtpConfirmBloc>();
+          //       bloc.add(OtpResendEvent());
+          //     },
+          //     child: const Text('Resend OTP')),
           Text('($time)'),
         ],
       );
