@@ -125,7 +125,7 @@ class ForgotPassButton extends StatelessWidget {
         TextButton(
             onPressed: () {
               Navigator.of(context).pushNamed(
-                RouteConstants.forgotPassword,
+                RouteConstants.userProfile,
               );
             },
             child: const Text('Forgot Password?')),

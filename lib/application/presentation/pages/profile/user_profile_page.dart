@@ -7,12 +7,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_core/flutter_core.dart' as core;
 
-import '../../../constants/ui_constants.dart';
-import '../../../gen/assets.gen.dart';
-import '../../../utils/image_helper.dart';
-import '../../bloc/user_profile/user_profile_bloc.dart';
-import '../../bloc/user_profile/user_profile_event.dart';
-import '../../bloc/user_profile/user_profile_state.dart';
+import '../../../../constants/ui_constants.dart';
+import '../../../../gen/assets.gen.dart';
+import '../../../../utils/image_helper.dart';
+import '../../../bloc/user_profile/user_profile_bloc.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -38,9 +36,9 @@ class ProfileListener extends StatelessWidget {
     final bloc = context.read<ProfileBloc>();
     return core.BlocListener<ProfileBloc, ProfileState>(
       listener: (context, state) {
-        if (state.imageSourceActionSheetIsVisible) {
-          _showImageSourceActionSheet(context);
-        }
+        // if (state.imageSourceActionSheetIsVisible) {
+        //   _showImageSourceActionSheet(context);
+        // }
       },
       child: const ProfileView(),
     );
@@ -55,34 +53,40 @@ class ProfileView extends StatelessWidget {
     return SafeArea(
       child: Center(
         child: Column(
-          children: const [
+          children: [
             UIConstants.verticalSpace24,
-            AvatarWidget(),
+            const AvatarWidget(),
             UIConstants.verticalSpace12,
-            UserNameTileWidget(),
+            const UserNameTileWidget(),
             UIConstants.verticalSpace4,
-            Text("Edit",
-                style: TextStyle(
-                    fontSize: 16,
-                    color: ColorConstants.gradientTextEdit,
-                    fontWeight: FontWeight.w600)),
-            PhoneNumberProfileWidget(),
-            Divider(
+            TextButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed(
+                    RouteConstants.userProfile,
+                  );
+                },
+                child: const Text("Edit",
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: ColorConstants.gradientTextEdit,
+                        fontWeight: FontWeight.w600))),
+            const PhoneNumberProfileWidget(),
+            const Divider(
               height: 1,
               color: ColorConstants.textBlack3,
             ),
-            DateOfBirthWidget(),
-            Divider(
+            const DateOfBirthWidget(),
+            const Divider(
               height: 1,
               color: ColorConstants.textBlack3,
             ),
-            GenderWidget(),
-            Divider(
+            const GenderWidget(),
+            const Divider(
               height: 1,
               color: ColorConstants.textBlack3,
             ),
-            LanguageWidget(),
-            ChangePasswordButtonWidget()
+            const LanguageWidget(),
+            const ChangePasswordButtonWidget()
           ],
         ),
       ),
@@ -101,21 +105,21 @@ class AvatarWidget extends StatelessWidget {
       final avatarPath = state.user.avatarPath;
       return avatarPath == null
           ? Container(
-        decoration: const BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.blue,
-        ),
-        width: 100,
-        height: 100,
-        child: const Icon(
-          Icons.person,
-          size: 50,
-        ),
-      )
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.blue,
+              ),
+              width: 100,
+              height: 100,
+              child: const Icon(
+                Icons.person,
+                size: 50,
+              ),
+            )
           : CircleAvatar(
-        radius: 50,
-        backgroundImage: NetworkImage(avatarPath ?? ''),
-      );
+              radius: 50,
+              backgroundImage: NetworkImage(avatarPath ?? ''),
+            );
     });
   }
 }
@@ -268,7 +272,10 @@ class LanguageWidget extends StatelessWidget {
                     color: ColorConstants.textBlack,
                     fontWeight: FontWeight.w600),
               ),
-              const Icon(Icons.arrow_forward_ios,color: ColorConstants.gradientRight,)
+              const Icon(
+                Icons.arrow_forward_ios,
+                color: ColorConstants.gradientRight,
+              )
             ],
           ),
         ],
@@ -294,65 +301,56 @@ class ChangePasswordButtonWidget extends StatelessWidget {
   }
 }
 
-Widget _saveProfileChangesButton() {
-  return BlocBuilder<ProfileBloc, ProfileState>(builder: (context, state) {
-    return ElevatedButton(
-      onPressed: () {},
-      child: const Text('Save Changes'),
-    );
-  });
-}
-
-void _showImageSourceActionSheet(BuildContext context) {
-  selectImageSource(imageSource) {
-    context.read<ProfileBloc>().add(OpenImagePicker(imageSource: imageSource));
-  }
-
-  if (Platform.isIOS) {
-    showCupertinoModalPopup(
-      context: context,
-      builder: (context) =>
-          CupertinoActionSheet(
-            actions: [
-              CupertinoActionSheetAction(
-                child: const Text('Camera'),
-                onPressed: () {
-                  Navigator.pop(context);
-                  selectImageSource(ImageSource.camera);
-                },
-              ),
-              CupertinoActionSheetAction(
-                child: const Text('Gallery'),
-                onPressed: () {
-                  Navigator.pop(context);
-                  selectImageSource(ImageSource.gallery);
-                },
-              )
-            ],
-          ),
-    );
-  } else {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) =>
-          Wrap(children: [
-            ListTile(
-              leading: const Icon(Icons.camera_alt),
-              title: const Text('Camera'),
-              onTap: () {
-                Navigator.pop(context);
-                selectImageSource(ImageSource.camera);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.photo_album),
-              title: const Text('Gallery'),
-              onTap: () {
-                Navigator.pop(context);
-                selectImageSource(ImageSource.gallery);
-              },
-            ),
-          ]),
-    );
-  }
-}
+// void _showImageSourceActionSheet(BuildContext context) {
+//   selectImageSource(imageSource) {
+//     context.read<ProfileBloc>().add(OpenImagePicker(imageSource: imageSource));
+//   }
+//
+//   if (Platform.isIOS) {
+//     showCupertinoModalPopup(
+//       context: context,
+//       builder: (context) =>
+//           CupertinoActionSheet(
+//             actions: [
+//               CupertinoActionSheetAction(
+//                 child: const Text('Camera'),
+//                 onPressed: () {
+//                   Navigator.pop(context);
+//                   selectImageSource(ImageSource.camera);
+//                 },
+//               ),
+//               CupertinoActionSheetAction(
+//                 child: const Text('Gallery'),
+//                 onPressed: () {
+//                   Navigator.pop(context);
+//                   selectImageSource(ImageSource.gallery);
+//                 },
+//               )
+//             ],
+//           ),
+//     );
+//   } else {
+//     showModalBottomSheet(
+//       context: context,
+//       builder: (context) =>
+//           Wrap(children: [
+//             ListTile(
+//               leading: const Icon(Icons.camera_alt),
+//               title: const Text('Camera'),
+//               onTap: () {
+//                 Navigator.pop(context);
+//                 selectImageSource(ImageSource.camera);
+//               },
+//             ),
+//             ListTile(
+//               leading: const Icon(Icons.photo_album),
+//               title: const Text('Gallery'),
+//               onTap: () {
+//                 Navigator.pop(context);
+//                 selectImageSource(ImageSource.gallery);
+//               },
+//             ),
+//           ]),
+//     );
+//   }
+// }

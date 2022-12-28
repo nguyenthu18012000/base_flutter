@@ -1,43 +1,38 @@
-import 'package:flutter/material.dart';
+part of 'user_profile_bloc.dart';
 
-import '../../datasource/models/user.dart';
-
-class ProfileState {
+class ProfileState extends Equatable {
+  final bool isLoading;
+  final String? errMessage;
+  final bool isSuccess;
+  final bool isReadPrivacy;
   final User user;
-  final bool isCurrentUser;
-  final String userDescription;
 
-  final FormSubmissionStatus formStatus;
-  bool imageSourceActionSheetIsVisible;
+  const ProfileState({
+    this.isLoading = false,
+    this.isSuccess =false,
+    this.errMessage,
+    this.isReadPrivacy = false,
+    this.user
 
-  ProfileState({
-    @required User user,
-    @required bool isCurrentUser,
-    String avatarPath,
-    String userDescription,
-    this.formStatus = const InitialFormStatus(),
-    imageSourceActionSheetIsVisible = false,
-  })  : this.user = user,
-        this.isCurrentUser = isCurrentUser,
-        this.avatarPath = avatarPath,
-        this.userDescription = userDescription ?? user.description,
-        this.imageSourceActionSheetIsVisible = imageSourceActionSheetIsVisible;
+  });
 
   ProfileState copyWith({
-    User user,
-    String avatarPath,
-    String userDescription,
-    FormSubmissionStatus formStatus,
-    bool imageSourceActionSheetIsVisible,
+    bool isLoading = false,
+    bool isSuccess = false,
+    String? errMessage,
+    bool? isReadPrivacy,
+
+
   }) {
     return ProfileState(
-      user: user ?? this.user,
-      isCurrentUser: this.isCurrentUser,
-      avatarPath: avatarPath ?? this.avatarPath,
-      userDescription: userDescription ?? this.userDescription,
-      formStatus: formStatus ?? this.formStatus,
-      imageSourceActionSheetIsVisible: imageSourceActionSheetIsVisible ??
-          this.imageSourceActionSheetIsVisible,
+        isLoading: isLoading,
+        errMessage: errMessage,
+        isSuccess: isSuccess,
+        isReadPrivacy: isReadPrivacy ?? this.isReadPrivacy
     );
   }
+
+  @override
+  List<Object?> get props => [isLoading, errMessage, isSuccess,isReadPrivacy];
+
 }

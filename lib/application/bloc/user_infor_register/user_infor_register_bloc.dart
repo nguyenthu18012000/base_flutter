@@ -79,7 +79,6 @@ class UserInforRegisterBloc
       (r) => state.copyWith(isSuccess: true),
     );
     emit(newState);
-
     //emit(state.copyWith(isLoading: false, isSuccess: true));
   }
 

@@ -8,17 +8,14 @@ class UserProfileRemote {
   UserProfileRemote(this._appClient);
 
   @override
-  Future<Either<Failure, List<Employee>?>> getEmployees() async {
+  Future<Either<Failure, User?>> getEmployees() async {
     final result = await _appClient.call(ApiConstants.getEmployees,
         method: RestfulMethod.get);
 
     return result.fold(
       (l) => Left(l),
       (r) {
-        if (r is List) {
           return Right(r.map((e) => Employee.fromJson(e)).toList());
-        }
-        return const Right(null);
       },
     );
   }
