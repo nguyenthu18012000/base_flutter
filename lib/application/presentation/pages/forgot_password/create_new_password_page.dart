@@ -42,6 +42,10 @@ class CreateNewPasswordListener extends StatelessWidget {
           core.UIHelper.showSnackBar(context, msg: 'Change success');
           // Navigator.of(context)
           //     .popUntil(ModalRoute.withName(RouteConstants.login));
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            RouteConstants.login,
+            ModalRoute.withName(RouteConstants.login),
+          );
         }
       },
       child: const CreateNewPasswordView(),
@@ -91,8 +95,6 @@ class CreateNewPasswordButton extends StatelessWidget {
             bloc.add(CreatePasswordButtonPressed(password: bloc.password.text));
           }
         },
-
-
         child: const Text('Create Password'));
   }
 }
@@ -107,6 +109,7 @@ class NewPasswordInputForm extends StatefulWidget {
 class _NewPasswordInputFormState extends State<NewPasswordInputForm> {
   bool _hidePassword = true;
   bool _hidePasswordConfirm = true;
+
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<CreateNewPasswordBloc>();
@@ -148,7 +151,7 @@ class _NewPasswordInputFormState extends State<NewPasswordInputForm> {
             autocorrect: false,
             obscureText: _hidePasswordConfirm,
             keyboardType: TextInputType.text,
-            decoration:  InputDecoration(
+            decoration: InputDecoration(
               hintText: 'Re-enter password',
               prefixIcon: Icon(Icons.lock_outline),
               suffixIcon: IconButton(

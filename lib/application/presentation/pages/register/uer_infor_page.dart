@@ -46,6 +46,10 @@ class UserInforRegisterListener extends StatelessWidget {
         }
         if (state.isSuccess == true) {
           core.UIHelper.showSnackBar(context, msg: 'ok');
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            RouteConstants.login,
+            ModalRoute.withName(RouteConstants.login),
+          );
         }
       },
       child: const UserInforView(),
