@@ -153,6 +153,9 @@ class _PhoneInputFormState extends State<PhoneInputForm> {
               if (value == null || value.isEmpty) {
                 return 'Please enter some text';
               }
+              if(!RegExp(r'^((0[0-9]))\d{8}$').hasMatch(value)){
+                return 'Phone error';
+              }
               return null;
             },
           ),
