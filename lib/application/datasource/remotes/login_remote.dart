@@ -7,7 +7,7 @@ class LoginRemote {
 
   LoginRemote(this._appClient);
 
-  Future<Either<Failure, String>> login(LoginRequest loginRequest) async {
+  Future<Either<Failure, LoginResponse>> login(LoginRequest loginRequest) async {
     final result = await _appClient.call(ApiConstants.login,
         data: {
           "username": loginRequest.username,
@@ -18,9 +18,10 @@ class LoginRemote {
     return result.fold(
           (l) => Left(l),
           (r) {
-            final token =  (r as Map<String, dynamic>)['access_token'];
-            UserInfo.saveTokenInfo(token);
-        return Right(token);
+        //     final token =  (r as Map<String, dynamic>)['access_token'];
+        //     UserInfo.saveTokenInfo(token);
+        // return Right(token);
+            return Right(LoginResponse.fromJson(r));
       },
     );
   }

@@ -34,7 +34,9 @@ class CreateNewPasswordListener extends StatelessWidget {
           core.UIHelper.showSnackBar(context, msg: state.errMessage);
         }
         if (state.isSuccess == true) {
-            core.UIHelper.showSnackBar(context, msg: 'Change success');
+          core.UIHelper.showSnackBar(context, msg: 'Change success');
+          // Navigator.of(context)
+          //     .popUntil(ModalRoute.withName(RouteConstants.login));
         }
       },
       child: const CreateNewPasswordView(),
