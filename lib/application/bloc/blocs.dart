@@ -8,3 +8,6 @@ export 'create_password/create_password_bloc.dart';
 export 'user_infor_register/user_infor_register_bloc.dart';
 export 'forgot_password/forgot_password_bloc.dart';
 export 'create_new_password/create_new_password_bloc.dart';
+export 'edit_profile/edit_profile_bloc.dart';
+export 'change_password/step_two/change_password_step_two_bloc.dart';
+export 'change_password/step_one/change_password_step_one_bloc.dart';

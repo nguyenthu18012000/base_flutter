@@ -7,15 +7,15 @@ class UserProfileRemote {
 
   UserProfileRemote(this._appClient);
 
-  @override
-  Future<Either<Failure, User?>> getEmployees() async {
-    final result = await _appClient.call(ApiConstants.getEmployees,
-        method: RestfulMethod.get);
+  Future<Either<Failure, User?>> getUserProfile(String id) async {
+    final queryParameters = <String, dynamic>{r'id': id};
+    final result = await _appClient.call(ApiConstants.getUserProfile,
+        method: RestfulMethod.get, queryParameters: queryParameters);
 
     return result.fold(
       (l) => Left(l),
       (r) {
-          return Right(r.map((e) => Employee.fromJson(e)).toList());
+        return Right(r.map((e) => User.fromJson(e)));
       },
     );
   }

@@ -4,11 +4,12 @@ import 'package:base_bloc_flutter/constants/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_core/flutter_core.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_core/flutter_core.dart' as core;
 
 import '../../../../constants/ui_constants.dart';
-import '../../../../gen/assets.gen.dart';
+import '../../../../utils/app_button.dart';
 import '../../../../utils/image_helper.dart';
 import '../../../bloc/user_profile/user_profile_bloc.dart';
 
@@ -18,9 +19,13 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return core.AppScaffold<ProfileBloc>(
-      onReceiveArguments: (data, bloc) {},
+      onReceiveArguments: (data, bloc) {
+        if (data is String) {
+          bloc?.userID = data;
+        }
+      },
       isBack: true,
-      onLoadData: (bloc) => bloc?.add,
+      onLoadData: (bloc) => bloc?.add(GetUserProfileEvent()),
       body: const ProfileListener(),
     );
   }
@@ -33,12 +38,20 @@ class ProfileListener extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = context.read<ProfileBloc>();
     return core.BlocListener<ProfileBloc, ProfileState>(
+      listenWhen: (previous, current) {
+        return current.errMessage != null ||
+            previous.isLoading != current.isLoading;
+      },
       listener: (context, state) {
-        // if (state.imageSourceActionSheetIsVisible) {
-        //   _showImageSourceActionSheet(context);
-        // }
+        if (state.isLoading) {
+          UIHelper.showLoading();
+        } else {
+          UIHelper.hideLoading();
+        }
+        if (state.errMessage != null) {
+          UIHelper.showSnackBar(context, msg: state.errMessage);
+        }
       },
       child: const ProfileView(),
     );
@@ -54,6 +67,15 @@ class ProfileView extends StatelessWidget {
       child: Center(
         child: Column(
           children: [
+            UIConstants.verticalSpace44,
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text("Account Setting",
+                  style: TextStyle(
+                      fontSize: 24,
+                      color: ColorConstants.textBlack,
+                      fontWeight: FontWeight.w700)),
+            ),
             UIConstants.verticalSpace24,
             const AvatarWidget(),
             UIConstants.verticalSpace12,
@@ -62,7 +84,7 @@ class ProfileView extends StatelessWidget {
             TextButton(
                 onPressed: () {
                   Navigator.of(context).pushNamed(
-                    RouteConstants.userProfile,
+                    RouteConstants.editProfile,
                   );
                 },
                 child: const Text("Edit",
@@ -70,22 +92,30 @@ class ProfileView extends StatelessWidget {
                         fontSize: 16,
                         color: ColorConstants.gradientTextEdit,
                         fontWeight: FontWeight.w600))),
+            UIConstants.verticalSpace44,
             const PhoneNumberProfileWidget(),
+            UIConstants.verticalSpace16,
             const Divider(
               height: 1,
               color: ColorConstants.textBlack3,
             ),
+            UIConstants.verticalSpace16,
             const DateOfBirthWidget(),
+            UIConstants.verticalSpace16,
             const Divider(
               height: 1,
               color: ColorConstants.textBlack3,
             ),
+            UIConstants.verticalSpace16,
             const GenderWidget(),
+            UIConstants.verticalSpace16,
             const Divider(
               height: 1,
               color: ColorConstants.textBlack3,
             ),
+            UIConstants.verticalSpace16,
             const LanguageWidget(),
+            UIConstants.verticalSpace44,
             const ChangePasswordButtonWidget()
           ],
         ),
@@ -100,9 +130,9 @@ class AvatarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return core.BlocBuilder<ProfileBloc, ProfileState>(buildWhen: (pre, cur) {
-      return pre.user.avatarPath != cur.user.avatarPath;
+      return pre.user?.avatar != cur.user?.avatar;
     }, builder: (context, state) {
-      final avatarPath = state.user.avatarPath;
+      final avatarPath = state.user?.avatar;
       return avatarPath == null
           ? Container(
               decoration: const BoxDecoration(
@@ -119,6 +149,7 @@ class AvatarWidget extends StatelessWidget {
           : CircleAvatar(
               radius: 50,
               backgroundImage: NetworkImage(avatarPath ?? ''),
+              backgroundColor: Colors.transparent,
             );
     });
   }
@@ -130,10 +161,10 @@ class UserNameTileWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return core.BlocBuilder<ProfileBloc, ProfileState>(buildWhen: (pre, cur) {
-      return pre.user.name != cur.user.name;
+      return pre.user?.name != cur.user?.name;
     }, builder: (context, state) {
       return Text(
-        state.user.name ?? '',
+        state.user?.name ?? 'User Name',
         style: const TextStyle(
             fontSize: 20,
             color: ColorConstants.textBlack,
@@ -149,7 +180,7 @@ class PhoneNumberProfileWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return core.BlocBuilder<ProfileBloc, ProfileState>(buildWhen: (pre, cur) {
-      return pre.user.phoneNumber != cur.user.phoneNumber;
+      return pre.user?.phoneNumber != cur.user?.phoneNumber;
     }, builder: (context, state) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -162,7 +193,7 @@ class PhoneNumberProfileWidget extends StatelessWidget {
                 fontWeight: FontWeight.w400),
           ),
           Text(
-            "${state.user.phoneNumber}",
+            "${state.user?.phoneNumber}",
             style: const TextStyle(
                 fontSize: 16,
                 color: ColorConstants.textBlack,
@@ -180,7 +211,7 @@ class DateOfBirthWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return core.BlocBuilder<ProfileBloc, ProfileState>(buildWhen: (pre, cur) {
-      return pre.user.dateOfBirth != cur.user.dateOfBirth;
+      return pre.user?.dateOfBirth != cur.user?.dateOfBirth;
     }, builder: (context, state) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -193,7 +224,7 @@ class DateOfBirthWidget extends StatelessWidget {
                 fontWeight: FontWeight.w400),
           ),
           Text(
-            "${state.user.dateOfBirth}",
+            "${state.user?.dateOfBirth}",
             style: const TextStyle(
                 fontSize: 16,
                 color: ColorConstants.textBlack,
@@ -211,7 +242,7 @@ class GenderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return core.BlocBuilder<ProfileBloc, ProfileState>(buildWhen: (pre, cur) {
-      return pre.user.gender != cur.user.gender;
+      return pre.user?.gender != cur.user?.gender;
     }, builder: (context, state) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -230,7 +261,7 @@ class GenderWidget extends StatelessWidget {
                 size: 20,
               ),
               Text(
-                "${state.user.gender}",
+                "${state.user?.gender}",
                 style: const TextStyle(
                     fontSize: 16,
                     color: ColorConstants.textBlack,
@@ -249,38 +280,39 @@ class LanguageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return core.BlocBuilder<ProfileBloc, ProfileState>(buildWhen: (pre, cur) {
-      return pre.user.language != cur.user.language;
-    }, builder: (context, state) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const Text(
-            "Gender",
-            style: TextStyle(
-                fontSize: 16,
-                color: ColorConstants.labelUser,
-                fontWeight: FontWeight.w400),
-          ),
-          Row(
-            children: [
-              Image.asset(Assets.images.fagForJapan),
-              Text(
-                "${state.user.language}",
-                style: const TextStyle(
-                    fontSize: 16,
-                    color: ColorConstants.textBlack,
-                    fontWeight: FontWeight.w600),
-              ),
-              const Icon(
-                Icons.arrow_forward_ios,
-                color: ColorConstants.gradientRight,
-              )
-            ],
-          ),
-        ],
-      );
-    });
+    // return core.BlocBuilder<ProfileBloc, ProfileState>(buildWhen: (pre, cur) {
+    // return pre.user?.language != cur.user?.language;
+    // }, builder: (context, state) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const Text(
+          "Language",
+          style: TextStyle(
+              fontSize: 16,
+              color: ColorConstants.labelUser,
+              fontWeight: FontWeight.w400),
+        ),
+        Row(
+          children: const [
+            // Image.asset(Assets.images.fagForJapan),
+            Text(
+              "Japan",
+              style: TextStyle(
+                  fontSize: 16,
+                  color: ColorConstants.textBlack,
+                  fontWeight: FontWeight.w600),
+            ),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: ColorConstants.gradientRight,
+              size: 14.0,
+            )
+          ],
+        ),
+      ],
+    );
+    // });
   }
 }
 
@@ -289,15 +321,14 @@ class ChangePasswordButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: OutlinedButton(
+    return GradientButton(
         onPressed: () {
-          debugPrint('Received click');
+          // final bloc = context.read<ChangePasswordStepTwoBloc>();
+          // if (bloc.formCreatePasswordKey.currentState!.validate()) {
+          //   bloc.add(CreatePasswordButtonPressed(password: bloc.password.text));
+          // }
         },
-        child: const Text('Change Password'),
-      ),
-    );
+        child: const Text('Change Password'));
   }
 }
 

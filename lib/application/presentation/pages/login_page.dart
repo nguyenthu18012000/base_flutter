@@ -29,8 +29,11 @@ class LoginListener extends StatelessWidget {
           core.UIHelper.showSnackBar(context, msg: state.errMessage);
         }
         if (state.isSuccess == true) {
-          //
-          print('login ok');
+          final bloc = context.read<LoginBloc>();
+          Navigator.of(context).pushNamed(
+            RouteConstants.userProfile,
+            arguments: bloc.userId,
+          );
         }
       },
       child: const LoginView(),
@@ -125,7 +128,7 @@ class ForgotPassButton extends StatelessWidget {
         TextButton(
             onPressed: () {
               Navigator.of(context).pushNamed(
-                RouteConstants.userProfile,
+                RouteConstants.forgotPassword,
               );
             },
             child: const Text('Forgot Password?')),

@@ -2,8 +2,8 @@ part of 'user_profile_bloc.dart';
 
 abstract class ProfileEvent {}
 
-class ChangeAvatarRequest extends ProfileEvent {}
-
+class GetUserProfileEvent extends ProfileEvent {
+}
 // class OpenImagePicker extends ProfileEvent {
 //   final ImageSource imageSource;
 //
@@ -22,4 +22,3 @@ class ChangeAvatarRequest extends ProfileEvent {}
 //   ProfileDescriptionChanged({this.description});
 // }
 
-class SaveProfileChanges extends ProfileEvent {}

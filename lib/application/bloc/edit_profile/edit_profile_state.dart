@@ -1,25 +1,25 @@
-part of 'user_profile_bloc.dart';
+part of 'edit_profile_bloc.dart';
 
-class ProfileState extends Equatable {
+class EditProfileState extends Equatable {
   final bool isLoading;
   final String? errMessage;
   final bool isSuccess;
   final User? user;
 
-  const ProfileState({
+  const EditProfileState({
     this.isLoading = false,
     this.isSuccess = false,
     this.errMessage,
     this.user,
   });
 
-  ProfileState copyWith({
+  EditProfileState copyWith({
     bool isLoading = false,
     bool isSuccess = false,
     String? errMessage,
     User? user,
   }) {
-    return ProfileState(
+    return EditProfileState(
         isLoading: isLoading,
         errMessage: errMessage,
         isSuccess: isSuccess,
