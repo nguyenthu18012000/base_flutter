@@ -22,6 +22,7 @@ class CreateNewPasswordBloc
 
   Future<void> _onPress(CreatePasswordButtonPressed event,
       Emitter<CreateNewPasswordState> emit) async {
+    emit(state.copyWith(isLoading: true));
     final password = event.password;
     final result = await _changePasswordForgotRemote.changePasswordForgot(
         phoneNumber, password, passwordConfirm.text);
@@ -31,6 +32,6 @@ class CreateNewPasswordBloc
     );
     emit(newState);
 
-  //  emit(state.copyWith(isSuccess: true, password: password));
+    //  emit(state.copyWith(isSuccess: true, password: password));
   }
 }

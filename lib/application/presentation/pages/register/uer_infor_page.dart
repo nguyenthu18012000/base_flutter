@@ -18,10 +18,11 @@ class UserInforPage extends StatelessWidget {
           bloc?.password = data.password;
         }
       },
-      body: const UserInforView(),
+      body: const UserInforRegisterListener(),
     );
   }
 }
+
 class UserInforRegisterListener extends StatelessWidget {
   const UserInforRegisterListener({
     Key? key,
@@ -44,7 +45,11 @@ class UserInforRegisterListener extends StatelessWidget {
           core.UIHelper.showSnackBar(context, msg: state.errMessage);
         }
         if (state.isSuccess == true) {
-         core.UIHelper.showSnackBar(context, msg: 'ok');
+          core.UIHelper.showSnackBar(context, msg: 'ok');
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            RouteConstants.login,
+            ModalRoute.withName(RouteConstants.login),
+          );
         }
       },
       child: const UserInforView(),
@@ -85,17 +90,23 @@ class ConfirmInforButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GradientButton(
-        onPressed: () {
-          final bloc = context.read<UserInforRegisterBloc>();
-          if (bloc.enableSubmit()) {
-            bloc.add(SubmitInforPressedEvent(
-                name: bloc.name.text,
-                dateOfBirth: bloc.dateOfBirth.text,
-                gender: bloc.gender!));
-          }
-        },
-        child: const Text('Confirm'));
+    final bloc = context.read<UserInforRegisterBloc>();
+    return core.BlocBuilder<UserInforRegisterBloc, UserInforRegisterState>(
+        buildWhen: (pre, cur) {
+      return pre.isEnableButton != cur.isEnableButton;
+    }, builder: (context, state) {
+      return GradientButton(
+          onPressed: () {
+            if (bloc.enableSubmit()) {
+              bloc.add(SubmitInforPressedEvent(
+                  name: bloc.name.text,
+                  dateOfBirth: bloc.dateOfBirth.text,
+                  gender: bloc.gender!));
+            }
+          },
+          enable: state.isEnableButton,
+          child: const Text('Confirm'));
+    });
   }
 }
 
@@ -249,6 +260,26 @@ class _UserInformationFormState extends State<UserInformationForm> {
           TextFormField(
             controller: bloc.dateOfBirth,
             enableSuggestions: false,
+            readOnly: true,
+            onTap: () async {
+              DateTime? pickedDate = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  locale: const Locale('en'),
+                  firstDate: DateTime(1950),
+                  //DateTime.now() - not to allow to choose before today.
+                  lastDate: DateTime(2023));
+
+              if (pickedDate != null) {
+                String formattedDate =
+                    core.DateFormat('dd/MM/yyyy').format(pickedDate);
+                setState(() {
+                  bloc.dateOfBirth.text =
+                      formattedDate; //set output date to TextField value.
+                });
+              } else {
+              }
+            },
             autocorrect: false,
             keyboardType: TextInputType.datetime,
             decoration: const InputDecoration(
@@ -260,7 +291,8 @@ class _UserInformationFormState extends State<UserInformationForm> {
                 return 'Please enter some text';
               }
               try {
-                final DateTime d = core.DateFormat('dd/mm/yyyy').parseStrict(value);
+                final DateTime d =
+                    core.DateFormat('dd/mm/yyyy').parseStrict(value);
               } catch (e) {
                 return 'date format:dd/mm/yyyy';
               }

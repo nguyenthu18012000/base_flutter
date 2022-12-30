@@ -4,6 +4,7 @@ import 'package:flutter_core/flutter_core.dart' as core;
 import '../../../../constants/constants.dart';
 import '../../../../utils/utils.dart';
 import '../../../bloc/blocs.dart';
+import '../../widgets/widgets.dart';
 
 class CreatePasswordPage extends StatelessWidget {
   const CreatePasswordPage({super.key});
@@ -104,6 +105,8 @@ class PasswordInputForm extends StatefulWidget {
 }
 
 class _PasswordInputFormState extends State<PasswordInputForm> {
+  bool _hidePassword = true;
+  bool _hidePasswordConfirm = true;
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<CreatePasswordBloc>();
@@ -111,18 +114,11 @@ class _PasswordInputFormState extends State<PasswordInputForm> {
       key: bloc.formCreatePasswordKey,
       child: Column(
         children: <Widget>[
-          TextFormField(
+          TextFieldPassword(
             controller: bloc.password,
-            enableSuggestions: false,
-            autocorrect: false,
-            obscureText: true,
-            keyboardType: TextInputType.text,
-            decoration: const InputDecoration(
-              hintText: 'Enter your new password',
-              prefixIcon: Icon(Icons.lock_outline),
-            ),
-            // The validator receives the text that the user has entered.
-            validator: (value) {
+            hintText: 'Enter your password..',
+            textInputType: TextInputType.text,
+            validator: (value){
               if (value == null || value.isEmpty) {
                 return 'Please enter some text';
               }
@@ -130,17 +126,10 @@ class _PasswordInputFormState extends State<PasswordInputForm> {
             },
           ),
           UIConstants.verticalSpace16,
-          TextFormField(
+          TextFieldPassword(
             controller: bloc.passwordConfirm,
-            enableSuggestions: false,
-            autocorrect: false,
-            obscureText: true,
-            keyboardType: TextInputType.text,
-            decoration: const InputDecoration(
-              hintText: 'Re-enter password',
-              prefixIcon: Icon(Icons.lock_outline),
-            ),
-            // The validator receives the text that the user has entered.
+            hintText:  'Re-enter password',
+            textInputType: TextInputType.text,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter some text';
@@ -151,6 +140,64 @@ class _PasswordInputFormState extends State<PasswordInputForm> {
               return null;
             },
           ),
+          // TextFormField(
+          //   controller: bloc.password,
+          //   enableSuggestions: false,
+          //   autocorrect: false,
+          //   obscureText: _hidePassword,
+          //   keyboardType: TextInputType.text,
+          //   decoration: InputDecoration(
+          //     hintText: 'Enter your new password',
+          //     prefixIcon: Icon(Icons.lock_outline),
+          //     suffixIcon: IconButton(
+          //         onPressed: () {
+          //           setState(() {
+          //             _hidePassword = !_hidePassword;
+          //           });
+          //         },
+          //         icon: _hidePassword
+          //             ? Icon(Icons.remove_red_eye_outlined)
+          //             : Icon(Icons.visibility_off_sharp)),
+          //   ),
+          //   // The validator receives the text that the user has entered.
+          //   validator: (value) {
+          //     if (value == null || value.isEmpty) {
+          //       return 'Please enter some text';
+          //     }
+          //     return null;
+          //   },
+          // ),
+          // UIConstants.verticalSpace16,
+          // TextFormField(
+          //   controller: bloc.passwordConfirm,
+          //   enableSuggestions: false,
+          //   autocorrect: false,
+          //   obscureText: _hidePasswordConfirm,
+          //   keyboardType: TextInputType.text,
+          //   decoration: InputDecoration(
+          //     hintText: 'Re-enter password',
+          //     prefixIcon: Icon(Icons.lock_outline),
+          //     suffixIcon: IconButton(
+          //         onPressed: () {
+          //           setState(() {
+          //             _hidePasswordConfirm = !_hidePasswordConfirm;
+          //           });
+          //         },
+          //         icon: _hidePasswordConfirm
+          //             ? Icon(Icons.remove_red_eye_outlined)
+          //             : Icon(Icons.visibility_off_sharp)),
+          //   ),
+          //   // The validator receives the text that the user has entered.
+          //   validator: (value) {
+          //     if (value == null || value.isEmpty) {
+          //       return 'Please enter some text';
+          //     }
+          //     if (bloc.password.text != bloc.passwordConfirm.text) {
+          //       return "Password not match, please try again.";
+          //     }
+          //     return null;
+          //   },
+          // ),
         ],
       ),
     );

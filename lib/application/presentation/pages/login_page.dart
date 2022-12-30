@@ -24,13 +24,21 @@ class LoginListener extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return core.BlocListener<LoginBloc, LoginState>(
+      listenWhen: (previous, current) {
+        return current.errMessage != null ||
+            previous.isLoading != current.isLoading;
+      },
       listener: (context, state) {
+        if (state.isLoading) {
+          core.UIHelper.showLoading();
+        } else {
+          core.UIHelper.hideLoading();
+        }
         if (state.errMessage != null) {
           core.UIHelper.showSnackBar(context, msg: state.errMessage);
         }
         if (state.isSuccess == true) {
-          //
-          print('login ok');
+          core.UIHelper.showSnackBar(context, msg: 'success');
         }
       },
       child: const LoginView(),
@@ -142,6 +150,8 @@ class LoginInputForm extends StatefulWidget {
 }
 
 class _LoginInputFormState extends State<LoginInputForm> {
+  bool _hideText = true;
+
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<LoginBloc>();
@@ -163,22 +173,32 @@ class _LoginInputFormState extends State<LoginInputForm> {
               if (value == null || value.isEmpty) {
                 return 'Please enter some text';
               }
+              if(!RegExp(r'^((0[0-9]))\d{8}$').hasMatch(value)){
+                return 'Phone error';
+              }
               return null;
             },
           ),
           UIConstants.verticalSpace16,
           TextFormField(
             controller: bloc.password,
-            obscureText: true,
+            obscureText: _hideText,
             enableSuggestions: false,
             autocorrect: false,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               hintText: 'Enter your password',
-              prefixIcon: Icon(
+              prefixIcon: const Icon(
                 Icons.password_outlined,
               ),
               suffixIcon: IconButton(
-                  onPressed: null, icon: Icon(Icons.remove_red_eye_outlined)),
+                  onPressed: () {
+                    setState(() {
+                      _hideText = !_hideText;
+                    });
+                  },
+                  icon: _hideText
+                      ? Icon(Icons.remove_red_eye_outlined)
+                      : Icon(Icons.visibility_off_sharp)),
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {

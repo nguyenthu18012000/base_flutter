@@ -98,7 +98,9 @@ class LoginWidget extends StatelessWidget {
           'Already have an account?',
           style: StyleConstants.largeText,
         ),
-        TextButton(onPressed: () {}, child: const Text('Login')),
+        TextButton(onPressed: () {
+          Navigator.of(context).pop();
+        }, child: const Text('Login')),
       ],
     );
   }
@@ -150,6 +152,9 @@ class _PhoneInputFormState extends State<PhoneInputForm> {
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter some text';
+              }
+              if(!RegExp(r'^((0[0-9]))\d{8}$').hasMatch(value)){
+                return 'Phone error';
               }
               return null;
             },
