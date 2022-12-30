@@ -54,10 +54,13 @@ class UserInforRegisterBloc
   String phoneNumber = '';
   String password = '';
 
+
   void _checkPrivacy(
       CheckPrivacyEvent event, Emitter<UserInforRegisterState> emit) {
     isReadPrivacy = event.isChecked;
     emit(state.copyWith(isReadPrivacy: isReadPrivacy));
+    bool isOk = isReadPrivacy && formUserKey.currentState!.validate();
+    emit(state.copyWith(isEnableButton: isOk));
   }
 
   Future<void> _onSubmit(SubmitInforPressedEvent event,

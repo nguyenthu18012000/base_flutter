@@ -6,12 +6,14 @@ class UserInforRegisterState extends Equatable {
   final String? errMessage;
   final bool isSuccess;
   final bool isReadPrivacy;
+  final bool isEnableButton;
 
   const UserInforRegisterState({
     this.isLoading = false,
     this.isSuccess =false,
     this.errMessage,
     this.isReadPrivacy = false,
+    this.isEnableButton = false,
 
   });
 
@@ -20,6 +22,7 @@ class UserInforRegisterState extends Equatable {
     bool isSuccess = false,
     String? errMessage,
     bool? isReadPrivacy,
+    bool? isEnableButton,
 
 
   }) {
@@ -27,12 +30,13 @@ class UserInforRegisterState extends Equatable {
         isLoading: isLoading,
         errMessage: errMessage,
         isSuccess: isSuccess,
-        isReadPrivacy: isReadPrivacy ?? this.isReadPrivacy
+        isReadPrivacy: isReadPrivacy ?? this.isReadPrivacy,
+        isEnableButton: isEnableButton ?? this.isEnableButton
     );
   }
 
   @override
-  List<Object?> get props => [isLoading, errMessage, isSuccess,isReadPrivacy];
+  List<Object?> get props => [isLoading, errMessage, isSuccess,isReadPrivacy,isEnableButton];
 
 }
 
