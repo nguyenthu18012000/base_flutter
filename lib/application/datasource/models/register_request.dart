@@ -5,6 +5,7 @@ class RegisterRequest {
   String? name;
   String? gender;
   String? dateOfBirth;
+  String? deviceToken;
 
   RegisterRequest(
       {this.username,
@@ -12,6 +13,7 @@ class RegisterRequest {
         this.confirmPassword,
         this.name,
         this.gender,
+        this.deviceToken,
         this.dateOfBirth});
 
   RegisterRequest.fromJson(Map<String, dynamic> json) {
@@ -20,6 +22,7 @@ class RegisterRequest {
     confirmPassword = json['confirmPassword'];
     name = json['name'];
     gender = json['gender'];
+    deviceToken = json['deviceToken'];
     dateOfBirth = json['dateOfBirth'];
   }
 
@@ -31,6 +34,7 @@ class RegisterRequest {
     data['name'] = this.name;
     data['gender'] = this.gender;
     data['dateOfBirth'] = this.dateOfBirth;
+    data['deviceToken'] = this.deviceToken;
     return data;
   }
 }

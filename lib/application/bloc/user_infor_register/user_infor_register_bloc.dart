@@ -1,6 +1,7 @@
 import 'package:base_bloc_flutter/application/datasource/models/models.dart';
 import 'package:base_bloc_flutter/application/datasource/remotes/remotes.dart';
 import 'package:bloc/bloc.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_core/flutter_core.dart';
 import 'package:meta/meta.dart';
@@ -54,7 +55,6 @@ class UserInforRegisterBloc
   String phoneNumber = '';
   String password = '';
 
-
   void _checkPrivacy(
       CheckPrivacyEvent event, Emitter<UserInforRegisterState> emit) {
     isReadPrivacy = event.isChecked;
@@ -66,6 +66,10 @@ class UserInforRegisterBloc
   Future<void> _onSubmit(SubmitInforPressedEvent event,
       Emitter<UserInforRegisterState> emit) async {
     emit(state.copyWith(isLoading: true));
+    late String? deviceToken;
+    await FirebaseMessaging.instance.getToken().then((token) {
+      deviceToken = token;
+    });
 
     final registerRequest = RegisterRequest(
       username: phoneNumber,
@@ -74,11 +78,12 @@ class UserInforRegisterBloc
       name: event.name,
       gender: event.gender.value,
       dateOfBirth: event.dateOfBirth,
+      deviceToken: deviceToken,
     );
     final result = await _registerRemote.register(registerRequest);
 
     final newState = result.fold(
-      (l) => state.copyWith(errMessage: l.message),
+      (l) => state.copyWith(errMessage: l.message ?? 'error'),
       (r) => state.copyWith(isSuccess: true),
     );
     emit(newState);
