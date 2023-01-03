@@ -191,7 +191,7 @@ class PhoneNumberProfileWidget extends StatelessWidget {
                 fontWeight: FontWeight.w400),
           ),
           Text(
-            "${state.user?.phoneNumber}",
+            "${state.user?.phoneNumber??""}",
             style: const TextStyle(
                 fontSize: 16,
                 color: ColorConstants.textBlack,
@@ -222,7 +222,7 @@ class DateOfBirthWidget extends StatelessWidget {
                 fontWeight: FontWeight.w400),
           ),
           Text(
-            "${state.user?.dateOfBirth}",
+            state.user?.dateOfBirth??"",
             style: const TextStyle(
                 fontSize: 16,
                 color: ColorConstants.textBlack,
@@ -259,7 +259,7 @@ class GenderWidget extends StatelessWidget {
                 size: 20,
               ),
               Text(
-                "${state.user?.gender}",
+                state.user?.gender??"",
                 style: const TextStyle(
                     fontSize: 16,
                     color: ColorConstants.textBlack,
