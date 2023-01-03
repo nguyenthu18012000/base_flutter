@@ -38,6 +38,11 @@ class LoginListener extends StatelessWidget {
           core.UIHelper.showSnackBar(context, msg: state.errMessage);
         }
         if (state.isSuccess == true) {
+          final bloc = context.read<LoginBloc>();
+          Navigator.of(context).pushNamed(
+            RouteConstants.userProfile,
+            arguments: bloc.userId,
+          );
           core.UIHelper.showSnackBar(context, msg: 'success');
         }
       },

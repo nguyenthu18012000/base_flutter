@@ -1,4 +1,5 @@
 import 'dart:developer' as dev;
+import 'package:base_bloc_flutter/application/bloc/change_password/step_two/change_password_step_two_bloc.dart';
 import 'package:flutter_core/flutter_core.dart';
 
 import '../application/bloc/blocs.dart';
@@ -16,6 +17,10 @@ Future<void> config(GetIt injector) async {
     injector.registerFactory<CreateNewPasswordBloc>(
         () => CreateNewPasswordBloc(injector()));
     injector.registerFactory<ForgotPasswordBloc>(() => ForgotPasswordBloc());
+    injector.registerFactory<ProfileBloc>(() => ProfileBloc(injector()));
+    injector.registerFactory<EditProfileBloc>(() => EditProfileBloc(injector()));
+    injector.registerFactory<ChangePasswordStepTwoBloc>(() => ChangePasswordStepTwoBloc(injector()));
+    injector.registerFactory<ChangePasswordStepOneBloc>(() => ChangePasswordStepOneBloc());
   } catch (e) {
     dev.log('Config BlocDependencies failed');
   }

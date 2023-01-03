@@ -7,11 +7,15 @@ class ColorConstants {
   static const backgroundColor = Colors.white;
   static const black = Color(0xFF333333);
   static const textBlack1 = Color(0xFF32384A);
+  static const textBlack = Color(0xFF000000);
   static const textBlack3 = Color(0xFF7A808D);
   static const textSubtitle = Color(0xFF5C7286);
   static const borderInput = Color(0xFFC7CCD8);
   static const gradientLeft = Color(0xFF007CAA);
   static const gradientRight = Color(0xFF09C296);
+  static const gradientTextEdit = Color(0xFF44B593);
+  static const labelUser = Color(0xFF7A808D);
+
 
   static const white = Colors.white;
 

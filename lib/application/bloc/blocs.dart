@@ -1,9 +1,13 @@
 export 'employee/employee_bloc.dart';
 export 'detail/detail_bloc.dart';
 export 'login/login_bloc.dart';
+export 'user_profile/user_profile_bloc.dart';
 export 'register/register_bloc.dart';
 export 'otp_confirm/otp_confirm_bloc.dart';
 export 'create_password/create_password_bloc.dart';
 export 'user_infor_register/user_infor_register_bloc.dart';
 export 'forgot_password/forgot_password_bloc.dart';
 export 'create_new_password/create_new_password_bloc.dart';
+export 'edit_profile/edit_profile_bloc.dart';
+export 'change_password/step_two/change_password_step_two_bloc.dart';
+export 'change_password/step_one/change_password_step_one_bloc.dart';
