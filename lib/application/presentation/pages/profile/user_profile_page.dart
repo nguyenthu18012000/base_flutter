@@ -1,16 +1,14 @@
 import 'dart:io';
-import 'package:base_bloc_flutter/application/presentation/pages/pages.dart';
+
 import 'package:base_bloc_flutter/constants/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_core/flutter_core.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:flutter_core/flutter_core.dart' as core;
 
 import '../../../../constants/ui_constants.dart';
 import '../../../../utils/app_button.dart';
-import '../../../../utils/image_helper.dart';
+import '../../../bloc/edit_profile/edit_profile_bloc.dart';
 import '../../../bloc/user_profile/user_profile_bloc.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -323,65 +321,14 @@ class ChangePasswordButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GradientButton(
         onPressed: () {
-          // final bloc = context.read<ChangePasswordStepTwoBloc>();
-          // if (bloc.formCreatePasswordKey.currentState!.validate()) {
-          //   bloc.add(CreatePasswordButtonPressed(password: bloc.password.text));
-          // }
+          final bloc = context.read<ProfileBloc>();
+          Navigator.of(context).pushNamed(
+            RouteConstants.changePasswordStepOne,
+            arguments: bloc.password
+          );
         },
         child: const Text('Change Password'));
   }
 }
 
-// void _showImageSourceActionSheet(BuildContext context) {
-//   selectImageSource(imageSource) {
-//     context.read<ProfileBloc>().add(OpenImagePicker(imageSource: imageSource));
-//   }
-//
-//   if (Platform.isIOS) {
-//     showCupertinoModalPopup(
-//       context: context,
-//       builder: (context) =>
-//           CupertinoActionSheet(
-//             actions: [
-//               CupertinoActionSheetAction(
-//                 child: const Text('Camera'),
-//                 onPressed: () {
-//                   Navigator.pop(context);
-//                   selectImageSource(ImageSource.camera);
-//                 },
-//               ),
-//               CupertinoActionSheetAction(
-//                 child: const Text('Gallery'),
-//                 onPressed: () {
-//                   Navigator.pop(context);
-//                   selectImageSource(ImageSource.gallery);
-//                 },
-//               )
-//             ],
-//           ),
-//     );
-//   } else {
-//     showModalBottomSheet(
-//       context: context,
-//       builder: (context) =>
-//           Wrap(children: [
-//             ListTile(
-//               leading: const Icon(Icons.camera_alt),
-//               title: const Text('Camera'),
-//               onTap: () {
-//                 Navigator.pop(context);
-//                 selectImageSource(ImageSource.camera);
-//               },
-//             ),
-//             ListTile(
-//               leading: const Icon(Icons.photo_album),
-//               title: const Text('Gallery'),
-//               onTap: () {
-//                 Navigator.pop(context);
-//                 selectImageSource(ImageSource.gallery);
-//               },
-//             ),
-//           ]),
-//     );
-//   }
-// }
+

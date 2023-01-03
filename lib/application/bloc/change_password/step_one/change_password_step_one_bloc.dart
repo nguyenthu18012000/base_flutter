@@ -14,4 +14,5 @@ class ChangePasswordStepOneBloc
 
   final formCurrentPasswordKey = GlobalKey<FormState>();
   final password = TextEditingController();
+  String? currentPassword = '';
 }

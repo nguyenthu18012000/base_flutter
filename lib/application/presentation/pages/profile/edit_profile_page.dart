@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_core/flutter_core.dart' as core;
@@ -114,7 +117,7 @@ class AvatarWidget extends StatelessWidget {
       return avatarPath == null
           ? GestureDetector(
               onTap: () async {
-                showBottomSheet(context);
+                _showImageSourceActionSheet(context);
                 // final ImagePicker picker = ImagePicker();
                 // // final XFile? photo =
                 // //     await picker.pickImage(source: ImageSource.camera);
@@ -143,6 +146,59 @@ class AvatarWidget extends StatelessWidget {
               backgroundColor: Colors.transparent,
             );
     });
+  }
+}
+
+void _showImageSourceActionSheet(BuildContext context) {
+  selectImageSource(imageSource) {
+    context.read<EditProfileBloc>().add(OpenImagePicker(imageSource: imageSource));
+  }
+  if (Platform.isIOS) {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (context) =>
+          CupertinoActionSheet(
+            actions: [
+              CupertinoActionSheetAction(
+                child: const Text('Camera'),
+                onPressed: () {
+                  Navigator.pop(context);
+                  selectImageSource(ImageSource.camera);
+                },
+              ),
+              CupertinoActionSheetAction(
+                child: const Text('Choose from the library'),
+                onPressed: () {
+                  Navigator.pop(context);
+                  selectImageSource(ImageSource.gallery);
+                },
+              )
+            ],
+          ),
+    );
+  } else {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) =>
+          Wrap(children: [
+            ListTile(
+              leading: const Icon(Icons.camera_alt),
+              title: const Text('Camera'),
+              onTap: () {
+                Navigator.pop(context);
+                selectImageSource(ImageSource.camera);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_album),
+              title: const Text('Choose from the library'),
+              onTap: () {
+                Navigator.pop(context);
+                selectImageSource(ImageSource.gallery);
+              },
+            ),
+          ]),
+    );
   }
 }
 

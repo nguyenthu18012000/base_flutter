@@ -13,9 +13,9 @@ class ChangePasswordStepOnePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return core.AppScaffold<ChangePasswordStepOneBloc>(
       onReceiveArguments: (data, bloc) {
-        // if (data is String) {
-        //   bloc?.phoneNumber = data;
-        // }
+        if (data is String) {
+          bloc?.currentPassword = data;
+        }
       },
       body: const ChangePasswordStepOneListener(),
     );
@@ -84,7 +84,7 @@ class NextToStepTwoButton extends StatelessWidget {
           final bloc = context.read<ChangePasswordStepOneBloc>();
           Navigator.of(context).pushNamed(
             RouteConstants.changePasswordStepTwo,
-            arguments: bloc.password.value.text,
+            arguments: bloc.password.text,
           );
         },
         child: const Text('Next'));

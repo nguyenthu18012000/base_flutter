@@ -13,6 +13,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   final UserProfileRemote _userProfileRemote;
   String userID = '';
+  String password = '';
 
   Future<void> _onGetUserProfile(
       GetUserProfileEvent event, Emitter<ProfileState> emit) async {
@@ -21,7 +22,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
     final newState = result.fold(
       (l) => state.copyWith(errMessage: l.message),
-      (r) => state.copyWith(user: r),
+      (r) {
+        password = r?.password??'';
+        return state.copyWith(user: r);
+      }
     );
     emit(newState);
   }
