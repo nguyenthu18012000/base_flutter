@@ -11,3 +11,4 @@ export 'create_new_password/create_new_password_bloc.dart';
 export 'edit_profile/edit_profile_bloc.dart';
 export 'change_password/step_two/change_password_step_two_bloc.dart';
 export 'change_password/step_one/change_password_step_one_bloc.dart';
+export 'notification/notification_bloc.dart';

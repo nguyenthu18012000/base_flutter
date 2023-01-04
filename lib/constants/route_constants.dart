@@ -14,4 +14,5 @@ class RouteConstants {
   static const userInforRegister = '/user-infor-register';
   static const forgotPassword = '/forgot-password';
   static const createNewPassword = '/create-new-password';
+  static const notification = '/notification';
 }
