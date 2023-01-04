@@ -1,6 +1,6 @@
 class LoginResponse {
   String? accessToken;
-  String? userId;
+  int? userId;
 
   LoginResponse({this.accessToken, this.userId});
 

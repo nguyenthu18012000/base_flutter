@@ -62,6 +62,10 @@ Future<void> config(GetIt injector) async {
           () => const CreateNewPasswordPage(),
       instanceName: RouteConstants.createNewPassword,
     );
+    injector.registerFactory<Widget>(
+          () => const NotificationPage(),
+      instanceName: RouteConstants.notification,
+    );
   } catch (e) {
     dev.log('Config PageDependencies failed');
   }
