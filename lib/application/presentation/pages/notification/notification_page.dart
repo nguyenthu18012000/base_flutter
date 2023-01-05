@@ -1,6 +1,4 @@
 import 'package:base_bloc_flutter/application/bloc/blocs.dart';
-import 'package:base_bloc_flutter/application/bloc/notification/notification_event.dart';
-import 'package:base_bloc_flutter/application/bloc/notification/notification_state.dart';
 import 'package:base_bloc_flutter/application/datasource/datasources.dart';
 import 'package:base_bloc_flutter/constants/constants.dart';
 import 'package:flutter/material.dart';

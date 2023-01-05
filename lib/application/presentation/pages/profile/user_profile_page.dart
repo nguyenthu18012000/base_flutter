@@ -66,13 +66,23 @@ class ProfileView extends StatelessWidget {
         child: Column(
           children: [
             UIConstants.verticalSpace44,
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text("Account Setting",
-                  style: TextStyle(
-                      fontSize: 24,
-                      color: ColorConstants.textBlack,
-                      fontWeight: FontWeight.w700)),
+            Row(
+              children: [
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text("Account Setting",
+                      style: TextStyle(
+                          fontSize: 24,
+                          color: ColorConstants.textBlack,
+                          fontWeight: FontWeight.w700)),
+                ),
+                const Spacer(),
+                IconButton(onPressed: (){
+                  Navigator.of(context).pushNamed(
+                    RouteConstants.notification,
+                  );
+                }, icon: const Icon(Icons.notifications)),
+              ],
             ),
             UIConstants.verticalSpace24,
             const AvatarWidget(),

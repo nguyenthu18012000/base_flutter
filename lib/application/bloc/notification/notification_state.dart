@@ -1,5 +1,4 @@
-import 'package:base_bloc_flutter/application/datasource/datasources.dart';
-import 'package:flutter_core/flutter_core.dart';
+part of 'notification_bloc.dart';
 
 enum NotificationStatus { initial, loading, success, failure }
 

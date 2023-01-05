@@ -1,8 +1,9 @@
-import 'package:base_bloc_flutter/application/bloc/notification/notification_event.dart';
-import 'package:base_bloc_flutter/application/bloc/notification/notification_state.dart';
 import 'package:base_bloc_flutter/application/datasource/datasources.dart';
-import 'package:base_bloc_flutter/application/datasource/remotes/notification_remote.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_core/flutter_core.dart';
+
+part 'notification_event.dart';
+part 'notification_state.dart';
 
 class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   NotificationBloc(this.notificationRemote) : super(const NotificationState()) {

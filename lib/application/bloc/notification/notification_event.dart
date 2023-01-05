@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+part of 'notification_bloc.dart';
 
 @immutable
 abstract class NotificationEvent {
