@@ -10,7 +10,6 @@ part 'login_state.dart';
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc(this._loginRemote) : super(const LoginState()) {
     on<LoginButtonPressed>(_onPress);
-
   }
 
   final LoginRemote _loginRemote;
