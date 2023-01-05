@@ -17,6 +17,7 @@ enum RestfulMethod { get, post, put }
 
 class AppClientImpl extends AppClient {
   final Dio? dio;
+
   AppClientImpl({
     this.dio,
   });
@@ -63,10 +64,16 @@ class AppClientImpl extends AppClient {
       if (response.statusCode == 401) {
         // Logout
       }
+      String? errorMessage;
+      if (response.statusMessage?.isEmpty ?? true) {
+        errorMessage = response.data['error'];
+      } else {
+        errorMessage = response.statusMessage;
+      }
       return Left(
         Failure(
           code: response.statusCode,
-          message: response.statusMessage,
+          message: errorMessage,
         ),
       );
     }
