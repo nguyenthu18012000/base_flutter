@@ -21,6 +21,7 @@ Future<void> config(GetIt injector) async {
     injector.registerFactory<EditProfileBloc>(() => EditProfileBloc(injector()));
     injector.registerFactory<ChangePasswordStepTwoBloc>(() => ChangePasswordStepTwoBloc(injector()));
     injector.registerFactory<ChangePasswordStepOneBloc>(() => ChangePasswordStepOneBloc());
+    injector.registerFactory<NotificationBloc>(() => NotificationBloc(injector()));
   } catch (e) {
     dev.log('Config BlocDependencies failed');
   }

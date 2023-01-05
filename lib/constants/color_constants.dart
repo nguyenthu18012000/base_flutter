@@ -21,6 +21,9 @@ class ColorConstants {
 
   static const backgroundGrey = Color(0xFFF7F7F9);
   static const errorRed = Color(0xFFEB5757);
+  static const cruise = Color(0xFFB1E7DA);
+  static const catskillWhite = Color(0xFFDFE4F1);
+  static const linkWater = Color(0xFFE7F3F8);
 
   static const MaterialColor primaryColorSwatch = MaterialColor(
     0xFF007AFF,
