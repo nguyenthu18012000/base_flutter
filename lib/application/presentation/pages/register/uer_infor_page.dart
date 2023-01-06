@@ -268,7 +268,7 @@ class _UserInformationFormState extends State<UserInformationForm> {
                   locale: const Locale('en'),
                   firstDate: DateTime(1950),
                   //DateTime.now() - not to allow to choose before today.
-                  lastDate: DateTime(2023));
+                  lastDate: DateTime.now());
 
               if (pickedDate != null) {
                 String formattedDate =

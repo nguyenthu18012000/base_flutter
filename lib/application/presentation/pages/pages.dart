@@ -8,3 +8,4 @@ export 'register/create_password_page.dart';
 export 'register/uer_infor_page.dart';
 export 'forgot_password/forgot_password_page.dart';
 export 'forgot_password/create_new_password_page.dart';
+export 'notification/notification_page.dart';
