@@ -15,7 +15,6 @@ class ChangePasswordStepTwoPage extends StatelessWidget {
       onReceiveArguments: (data, bloc) {
         if (data is String) {
           bloc?.currentPassword = data;
-          print("$data");
         }
       },
       body: const ChangePasswordStepTwoListener(),
@@ -38,8 +37,10 @@ class ChangePasswordStepTwoListener extends StatelessWidget {
         }
         if (state.isSuccess == true) {
           core.UIHelper.showSnackBar(context, msg: 'Change success');
-          // Navigator.of(context)
-          //     .popUntil(ModalRoute.withName(RouteConstants.login));
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            RouteConstants.login,
+            ModalRoute.withName(RouteConstants.login),
+          );
         }
       },
       child: const ChangePasswordStepTwoView(),
@@ -58,7 +59,7 @@ class ChangePasswordStepTwoView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: const [
-          UIConstants.verticalSpace44,
+          UIConstants.verticalSpace30,
           Text('Change Password', style: StyleConstants.hugeText),
           UIConstants.verticalSpace44,
           Text('Create new password for your account',
@@ -83,10 +84,11 @@ class CreateNewPasswordButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GradientButton(
         onPressed: () {
-          // final bloc = context.read<ChangePasswordStepTwoBloc>();
-          // if (bloc.formCreatePasswordKey.currentState!.validate()) {
-          //   bloc.add(CreatePasswordButtonPressed(password: bloc.password.text));
-          // }
+          final bloc = context.read<ChangePasswordStepTwoBloc>();
+          FocusScope.of(context).unfocus();
+          if (bloc.formCreatePasswordKey.currentState!.validate()) {
+            bloc.add(ChangePasswordButtonPressed());
+          }
         },
         child: const Text('Create Password'));
   }
@@ -100,6 +102,9 @@ class NewPasswordInputForm extends StatefulWidget {
 }
 
 class _NewPasswordInputFormState extends State<NewPasswordInputForm> {
+  bool _hideText = true;
+  bool _hideTextConfirmPassword = true;
+
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<ChangePasswordStepTwoBloc>();
@@ -111,11 +116,22 @@ class _NewPasswordInputFormState extends State<NewPasswordInputForm> {
             controller: bloc.password,
             enableSuggestions: false,
             autocorrect: false,
-            obscureText: true,
+            obscureText: _hideText,
             keyboardType: TextInputType.text,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               hintText: 'Enter your new password',
-              prefixIcon: Icon(Icons.lock_outline),
+              prefixIcon: const Icon(
+                Icons.lock_outline,
+              ),
+              suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _hideText = !_hideText;
+                    });
+                  },
+                  icon: _hideText
+                      ? const Icon(Icons.remove_red_eye_outlined)
+                      : const Icon(Icons.visibility_off_sharp)),
             ),
             // The validator receives the text that the user has entered.
             validator: (value) {
@@ -130,11 +146,22 @@ class _NewPasswordInputFormState extends State<NewPasswordInputForm> {
             controller: bloc.passwordConfirm,
             enableSuggestions: false,
             autocorrect: false,
-            obscureText: true,
+            obscureText: _hideTextConfirmPassword,
             keyboardType: TextInputType.text,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               hintText: 'Re-enter password',
-              prefixIcon: Icon(Icons.lock_outline),
+              prefixIcon: const Icon(
+                Icons.lock_outline,
+              ),
+              suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _hideTextConfirmPassword = !_hideTextConfirmPassword;
+                    });
+                  },
+                  icon: _hideTextConfirmPassword
+                      ? const Icon(Icons.remove_red_eye_outlined)
+                      : const Icon(Icons.visibility_off_sharp)),
             ),
             // The validator receives the text that the user has entered.
             validator: (value) {

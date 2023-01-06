@@ -1,6 +1,8 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:base_bloc_flutter/constants/constants.dart';
+import 'package:base_bloc_flutter/utils/extensions/datetime_extension.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_core/flutter_core.dart';
@@ -8,7 +10,6 @@ import 'package:flutter_core/flutter_core.dart' as core;
 
 import '../../../../constants/ui_constants.dart';
 import '../../../../utils/app_button.dart';
-import '../../../bloc/edit_profile/edit_profile_bloc.dart';
 import '../../../bloc/user_profile/user_profile_bloc.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -22,7 +23,6 @@ class ProfilePage extends StatelessWidget {
           bloc?.userID = data;
         }
       },
-      isBack: true,
       onLoadData: (bloc) => bloc?.add(GetUserProfileEvent()),
       body: const ProfileListener(),
     );
@@ -65,23 +65,20 @@ class ProfileView extends StatelessWidget {
       child: Center(
         child: Column(
           children: [
-            UIConstants.verticalSpace44,
+            UIConstants.verticalSpace30,
             Row(
-              children: [
-                const Align(
-                  alignment: Alignment.centerLeft,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: const [
+                Expanded(flex: 1, child: IconButtonWidget()),
+                Expanded(
+                  flex: 8,
                   child: Text("Account Setting",
                       style: TextStyle(
                           fontSize: 24,
                           color: ColorConstants.textBlack,
                           fontWeight: FontWeight.w700)),
                 ),
-                const Spacer(),
-                IconButton(onPressed: (){
-                  Navigator.of(context).pushNamed(
-                    RouteConstants.notification,
-                  );
-                }, icon: const Icon(Icons.notifications)),
+                Expanded(flex: 1, child: NotificationButtonWidget())
               ],
             ),
             UIConstants.verticalSpace24,
@@ -89,17 +86,7 @@ class ProfileView extends StatelessWidget {
             UIConstants.verticalSpace12,
             const UserNameTileWidget(),
             UIConstants.verticalSpace4,
-            TextButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamed(
-                    RouteConstants.editProfile,
-                  );
-                },
-                child: const Text("Edit",
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: ColorConstants.gradientTextEdit,
-                        fontWeight: FontWeight.w600))),
+            const EditUserProfileButton(),
             UIConstants.verticalSpace44,
             const PhoneNumberProfileWidget(),
             UIConstants.verticalSpace16,
@@ -124,10 +111,40 @@ class ProfileView extends StatelessWidget {
             UIConstants.verticalSpace16,
             const LanguageWidget(),
             UIConstants.verticalSpace44,
-            const ChangePasswordButtonWidget()
+            const ChangePasswordButtonWidget(),
+            UIConstants.verticalSpace16,
+            const LogoutButtonWidget(),
           ],
         ),
       ),
+    );
+  }
+}
+
+class IconButtonWidget extends StatelessWidget {
+  const IconButtonWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.arrow_back),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+  }
+}
+
+class NotificationButtonWidget extends StatelessWidget {
+  const NotificationButtonWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.notifications),
+      onPressed: () {
+        // Navigator.pop(context);
+      },
     );
   }
 }
@@ -163,6 +180,29 @@ class AvatarWidget extends StatelessWidget {
   }
 }
 
+class EditUserProfileButton extends StatelessWidget {
+  const EditUserProfileButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final bloc = context.read<ProfileBloc>();
+    return core.BlocBuilder<ProfileBloc, ProfileState>(
+        builder: (context, state) {
+      return TextButton(
+          onPressed: () {
+            Navigator.of(context)
+                .pushNamed(RouteConstants.editProfile, arguments: state.user)
+                .then((value) => bloc.add(GetUserProfileEvent()));
+          },
+          child: const Text("Edit",
+              style: TextStyle(
+                  fontSize: 16,
+                  color: ColorConstants.gradientTextEdit,
+                  fontWeight: FontWeight.w600)));
+    });
+  }
+}
+
 class UserNameTileWidget extends StatelessWidget {
   const UserNameTileWidget({Key? key}) : super(key: key);
 
@@ -188,7 +228,7 @@ class PhoneNumberProfileWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return core.BlocBuilder<ProfileBloc, ProfileState>(buildWhen: (pre, cur) {
-      return pre.user?.phoneNumber != cur.user?.phoneNumber;
+      return pre.user?.username != cur.user?.username;
     }, builder: (context, state) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -201,7 +241,7 @@ class PhoneNumberProfileWidget extends StatelessWidget {
                 fontWeight: FontWeight.w400),
           ),
           Text(
-            "${state.user?.phoneNumber}",
+            state.user?.username ?? "",
             style: const TextStyle(
                 fontSize: 16,
                 color: ColorConstants.textBlack,
@@ -232,7 +272,7 @@ class DateOfBirthWidget extends StatelessWidget {
                 fontWeight: FontWeight.w400),
           ),
           Text(
-            "${state.user?.dateOfBirth}",
+            state.user?.dateOfBirth?.dateTimeToYYYYMMDD ?? '',
             style: const TextStyle(
                 fontSize: 16,
                 color: ColorConstants.textBlack,
@@ -269,7 +309,7 @@ class GenderWidget extends StatelessWidget {
                 size: 20,
               ),
               Text(
-                "${state.user?.gender}",
+                state.user?.genderString ?? '',
                 style: const TextStyle(
                     fontSize: 16,
                     color: ColorConstants.textBlack,
@@ -332,13 +372,27 @@ class ChangePasswordButtonWidget extends StatelessWidget {
     return GradientButton(
         onPressed: () {
           final bloc = context.read<ProfileBloc>();
-          Navigator.of(context).pushNamed(
-            RouteConstants.changePasswordStepOne,
-            arguments: bloc.password
-          );
+          Navigator.of(context).pushNamed(RouteConstants.changePasswordStepOne,
+              arguments: bloc.password);
         },
         child: const Text('Change Password'));
   }
 }
 
+class LogoutButtonWidget extends StatelessWidget {
+  const LogoutButtonWidget({Key? key}) : super(key: key);
 
+  @override
+  Widget build(BuildContext context) {
+    return GradientButton(
+        onPressed: () {
+          final bloc = context.read<ProfileBloc>();
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            RouteConstants.login,
+            ModalRoute.withName(RouteConstants.login),
+          );
+          bloc.logout();
+        },
+        child: const Text('Logout'));
+  }
+}

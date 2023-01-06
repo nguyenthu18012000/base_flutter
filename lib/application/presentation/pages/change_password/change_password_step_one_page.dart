@@ -56,7 +56,7 @@ class ChangePasswordStepOneView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: const [
-          UIConstants.verticalSpace44,
+          UIConstants.verticalSpace30,
           Text('Change Password', style: StyleConstants.hugeText),
           UIConstants.verticalSpace44,
           Text('Please re-enter your password first',
@@ -99,6 +99,8 @@ class CurrentPasswordInputForm extends StatefulWidget {
 }
 
 class _CurrentPasswordInputFormState extends State<CurrentPasswordInputForm> {
+  bool _hideText = true;
+
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<ChangePasswordStepOneBloc>();
@@ -110,11 +112,22 @@ class _CurrentPasswordInputFormState extends State<CurrentPasswordInputForm> {
             controller: bloc.password,
             enableSuggestions: false,
             autocorrect: false,
-            obscureText: true,
+            obscureText: _hideText,
             keyboardType: TextInputType.text,
-            decoration: const InputDecoration(
-              hintText: 'Enter your new password',
-              prefixIcon: Icon(Icons.lock_outline),
+            decoration: InputDecoration(
+              hintText: 'Enter your current password',
+              prefixIcon: const Icon(
+                Icons.lock_outline,
+              ),
+              suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _hideText = !_hideText;
+                    });
+                  },
+                  icon: _hideText
+                      ? const Icon(Icons.remove_red_eye_outlined)
+                      : const Icon(Icons.visibility_off_sharp)),
             ),
             // The validator receives the text that the user has entered.
             validator: (value) {

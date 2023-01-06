@@ -5,10 +5,12 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_core/flutter_core.dart' as core;
 import 'package:image_picker/image_picker.dart';
+import 'package:base_bloc_flutter/utils/extensions/datetime_extension.dart';
 
 import '../../../../constants/constants.dart';
 import '../../../../utils/utils.dart';
 import '../../../bloc/blocs.dart';
+import '../../../datasource/models/user.dart';
 
 class EditProfilePage extends StatelessWidget {
   const EditProfilePage({super.key});
@@ -16,7 +18,13 @@ class EditProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return core.AppScaffold<EditProfileBloc>(
-      onReceiveArguments: (data, bloc) {},
+      onReceiveArguments: (data, bloc) {
+        if (data is User) {
+          // bloc?.user = data;
+          bloc?.updateUserProfile(data);
+        }
+      },
+      onLoadData: (bloc) => bloc?.add(FillEditProfileEvent()),
       body: const EditProfileListener(),
     );
   }
@@ -44,6 +52,7 @@ class EditProfileListener extends StatelessWidget {
           core.UIHelper.showSnackBar(context, msg: state.errMessage);
         }
         if (state.isSuccess == true) {
+          Navigator.pop(context);
           core.UIHelper.showSnackBar(context, msg: 'ok');
         }
       },
@@ -62,23 +71,47 @@ class UserInforView extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: const [
+        children:  [
+          UIConstants.verticalSpace30,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              Expanded(flex: 1, child: IconButtonWidget()),
+              Expanded(
+                flex: 8,
+                child: Text("Account Setting",
+                    style: TextStyle(
+                        fontSize: 24,
+                        color: ColorConstants.textBlack,
+                        fontWeight: FontWeight.w700)),
+              ),
+            ],
+          ),
           UIConstants.verticalSpace44,
-          Text("Account Setting",
-              style: TextStyle(
-                  fontSize: 24,
-                  color: ColorConstants.textBlack,
-                  fontWeight: FontWeight.w700)),
-          UIConstants.verticalSpace44,
-          AvatarWidget(),
+          const AvatarWidget(),
           UIConstants.verticalSpace12,
-          Align(alignment: Alignment.center, child: UserNameTileWidget()),
-          UserInformationForm(),
+          const Align(alignment: Alignment.center, child: UserNameTileWidget()),
           UIConstants.verticalSpace32,
-          ConfirmInforButton(),
+          const UserInformationForm(),
+          UIConstants.verticalSpace32,
+          const ConfirmInforButton(),
           UIConstants.verticalSpace32,
         ],
       ),
+    );
+  }
+}
+
+class IconButtonWidget extends StatelessWidget {
+  const IconButtonWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.arrow_back),
+      onPressed: () {
+        Navigator.pop(context);
+      },
     );
   }
 }
@@ -93,12 +126,7 @@ class ConfirmInforButton extends StatelessWidget {
     return GradientButton(
         onPressed: () {
           final bloc = context.read<EditProfileBloc>();
-          // if (bloc.enableSubmit()) {
-          //   bloc.add(SubmitInforPressedEvent(
-          //       name: bloc.name.text,
-          //       dateOfBirth: bloc.dateOfBirth.text,
-          //       gender: bloc.gender!));
-          // }
+          bloc.add(SubmitProfileEvent(bloc.user));
         },
         child: const Text('Update Profile'));
   }
@@ -118,14 +146,6 @@ class AvatarWidget extends StatelessWidget {
           ? GestureDetector(
               onTap: () async {
                 _showImageSourceActionSheet(context);
-                // final ImagePicker picker = ImagePicker();
-                // // final XFile? photo =
-                // //     await picker.pickImage(source: ImageSource.camera);
-                //
-                // final XFile? image =
-                //     await picker.pickImage(source: ImageSource.gallery);
-                //
-                // // print(photo.path);
               },
               child: Container(
                 decoration: const BoxDecoration(
@@ -140,10 +160,15 @@ class AvatarWidget extends StatelessWidget {
                 ),
               ),
             )
-          : CircleAvatar(
-              radius: 50,
-              backgroundImage: NetworkImage(avatarPath ?? ''),
-              backgroundColor: Colors.transparent,
+          : GestureDetector(
+              onTap: () async {
+                _showImageSourceActionSheet(context);
+              },
+              child: CircleAvatar(
+                radius: 50,
+                backgroundImage: NetworkImage(avatarPath ?? ''),
+                backgroundColor: Colors.transparent,
+              ),
             );
     });
   }
@@ -151,53 +176,62 @@ class AvatarWidget extends StatelessWidget {
 
 void _showImageSourceActionSheet(BuildContext context) {
   selectImageSource(imageSource) {
-    context.read<EditProfileBloc>().add(OpenImagePicker(imageSource: imageSource));
+    context
+        .read<EditProfileBloc>()
+        .add(OpenImagePicker(imageSource: imageSource));
   }
+
   if (Platform.isIOS) {
     showCupertinoModalPopup(
       context: context,
-      builder: (context) =>
-          CupertinoActionSheet(
-            actions: [
-              CupertinoActionSheetAction(
-                child: const Text('Camera'),
-                onPressed: () {
-                  Navigator.pop(context);
-                  selectImageSource(ImageSource.camera);
-                },
-              ),
-              CupertinoActionSheetAction(
-                child: const Text('Choose from the library'),
-                onPressed: () {
-                  Navigator.pop(context);
-                  selectImageSource(ImageSource.gallery);
-                },
-              )
-            ],
+      builder: (context) => CupertinoActionSheet(
+        actions: [
+          CupertinoActionSheetAction(
+            child: const Text('Camera'),
+            onPressed: () async {
+              final ImagePicker picker = ImagePicker();
+              final XFile? photo =
+                  await picker.pickImage(source: ImageSource.camera);
+              selectImageSource(photo?.path);
+            },
           ),
+          CupertinoActionSheetAction(
+            child: const Text('Choose from the library'),
+            onPressed: () async {
+              final ImagePicker picker = ImagePicker();
+              final XFile? image =
+                  await picker.pickImage(source: ImageSource.gallery);
+              selectImageSource(image?.path);
+            },
+          )
+        ],
+      ),
     );
   } else {
     showModalBottomSheet(
       context: context,
-      builder: (context) =>
-          Wrap(children: [
-            ListTile(
-              leading: const Icon(Icons.camera_alt),
-              title: const Text('Camera'),
-              onTap: () {
-                Navigator.pop(context);
-                selectImageSource(ImageSource.camera);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.photo_album),
-              title: const Text('Choose from the library'),
-              onTap: () {
-                Navigator.pop(context);
-                selectImageSource(ImageSource.gallery);
-              },
-            ),
-          ]),
+      builder: (context) => Wrap(children: [
+        ListTile(
+          leading: const Icon(Icons.camera_alt),
+          title: const Text('Camera'),
+          onTap: () async {
+            final ImagePicker picker = ImagePicker();
+            final XFile? photo =
+                await picker.pickImage(source: ImageSource.camera);
+            selectImageSource(photo?.path);
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.photo_album),
+          title: const Text('Choose from the library'),
+          onTap: () async {
+            final ImagePicker picker = ImagePicker();
+            final XFile? image =
+                await picker.pickImage(source: ImageSource.gallery);
+            selectImageSource(image?.path);
+          },
+        ),
+      ]),
     );
   }
 }
@@ -310,130 +344,154 @@ class _UserInformationFormState extends State<UserInformationForm> {
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<EditProfileBloc>();
+    return core.BlocBuilder<EditProfileBloc, EditProfileState>(
+        builder: (context, state) {
+      return Form(
+        key: bloc.formUserKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Name', style: StyleConstants.mediumText),
+            UIConstants.verticalSpace4,
+            TextFormField(
+              controller: bloc.name,
+              enableSuggestions: false,
+              autocorrect: false,
+              keyboardType: TextInputType.text,
+              decoration: const InputDecoration(
+                hintText: 'Enter your name',
+              ),
+              // The validator receives the text that the user has entered.
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter some text';
+                }
+                return null;
+              },
+            ),
+            UIConstants.verticalSpace16,
+            const Text('Phone number', style: StyleConstants.mediumText),
+            UIConstants.verticalSpace4,
+            TextFormField(
+              controller: bloc.userName,
+              enableSuggestions: false,
+              autocorrect: false,
+              keyboardType: TextInputType.text,
+              decoration: const InputDecoration(
+                hintText: 'Enter your name',
+              ),
+              // The validator receives the text that the user has entered.
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter some text';
+                }
+                return null;
+              },
+            ),
+            UIConstants.verticalSpace16,
+            const Text('Date of birth', style: StyleConstants.mediumText),
+            UIConstants.verticalSpace4,
+            TextFormField(
+              controller: bloc.dateOfBirth,
+              enableSuggestions: false,
+              readOnly: true,
+              onTap: () async {
+                DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    locale: const Locale('en'),
+                    firstDate: DateTime(1950),
+                    //DateTime.now() - not to allow to choose before today.
+                    lastDate: DateTime.now());
 
-    return Form(
-      key: bloc.formUserKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('Name', style: StyleConstants.mediumText),
-          UIConstants.verticalSpace4,
-          TextFormField(
-            controller: bloc.name,
-            enableSuggestions: false,
-            autocorrect: false,
-            keyboardType: TextInputType.text,
-            decoration: const InputDecoration(
-              hintText: 'Enter your name',
-            ),
-            // The validator receives the text that the user has entered.
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter some text';
-              }
-              return null;
-            },
-          ),
-          UIConstants.verticalSpace16,
-          const Text('Phone number', style: StyleConstants.mediumText),
-          UIConstants.verticalSpace4,
-          TextFormField(
-            controller: bloc.name,
-            enableSuggestions: false,
-            autocorrect: false,
-            keyboardType: TextInputType.text,
-            decoration: const InputDecoration(
-              hintText: 'Enter your name',
-            ),
-            // The validator receives the text that the user has entered.
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter some text';
-              }
-              return null;
-            },
-          ),
-          UIConstants.verticalSpace16,
-          const Text('Date of birth', style: StyleConstants.mediumText),
-          UIConstants.verticalSpace4,
-          TextFormField(
-            controller: bloc.dateOfBirth,
-            enableSuggestions: false,
-            autocorrect: false,
-            keyboardType: TextInputType.datetime,
-            decoration: const InputDecoration(
-              hintText: 'dd/mm/yyyy',
-              suffixIcon: Icon(Icons.calendar_today_outlined),
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter some text';
-              }
-              try {
-                final DateTime d =
-                    core.DateFormat('dd/mm/yyyy').parseStrict(value);
-              } catch (e) {
-                return 'date format:dd/mm/yyyy';
-              }
-              return null;
-            },
-          ),
-          UIConstants.verticalSpace16,
-          const Text('Gender', style: StyleConstants.mediumText),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Expanded(
-                child: ListTile(
-                  contentPadding: const EdgeInsets.all(0),
-                  title: const Text("Male", style: StyleConstants.mediumText),
-                  leading: Radio<Gender>(
-                    value: Gender.male,
-                    groupValue: bloc.gender,
-                    onChanged: (Gender? value) {
-                      setState(() {
-                        bloc.gender = value;
-                      });
-                    },
-                  ),
-                ),
+                if (pickedDate != null) {
+                  String formattedDate =
+                  core.DateFormat('dd/MM/yyyy').format(pickedDate);
+                  setState(() {
+                    bloc.dateOfBirth.text =
+                        formattedDate; //set output date to TextField value.
+                  });
+                } else {
+                }
+              },
+              autocorrect: false,
+              keyboardType: TextInputType.datetime,
+              decoration: const InputDecoration(
+                hintText: 'dd/mm/yyyy',
+                suffixIcon: Icon(Icons.calendar_today_outlined),
               ),
-              UIConstants.verticalSpace36,
-              Expanded(
-                child: ListTile(
-                  contentPadding: const EdgeInsets.all(0),
-                  title: const Text("Female", style: StyleConstants.mediumText),
-                  leading: Radio<Gender>(
-                    value: Gender.female,
-                    groupValue: bloc.gender,
-                    onChanged: (Gender? value) {
-                      setState(() {
-                        bloc.gender = value;
-                      });
-                    },
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter some text';
+                }
+                try {
+                  final DateTime d =
+                  core.DateFormat('dd/mm/yyyy').parseStrict(value);
+                } catch (e) {
+                  return 'date format:dd/mm/yyyy';
+                }
+                return null;
+              },
+            ),
+            UIConstants.verticalSpace16,
+            const Text('Gender', style: StyleConstants.mediumText),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.all(0),
+                    title: const Text("Male", style: StyleConstants.mediumText),
+                    leading: Radio<Gender>(
+                      value: Gender.male,
+                      groupValue: bloc.gender,
+                      onChanged: (Gender? value) {
+                        setState(() {
+                          bloc.gender = value;
+                        });
+                      },
+                    ),
                   ),
                 ),
-              ),
-              UIConstants.verticalSpace36,
-              Expanded(
-                child: ListTile(
-                  contentPadding: const EdgeInsets.all(0),
-                  title: const Text("Other", style: StyleConstants.mediumText),
-                  leading: Radio<Gender>(
-                    value: Gender.other,
-                    groupValue: bloc.gender,
-                    onChanged: (Gender? value) {
-                      setState(() {
-                        bloc.gender = value;
-                      });
-                    },
+                UIConstants.verticalSpace36,
+                Expanded(
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.all(0),
+                    title:
+                        const Text("Female", style: StyleConstants.mediumText),
+                    leading: Radio<Gender>(
+                      value: Gender.female,
+                      groupValue: bloc.gender,
+                      onChanged: (Gender? value) {
+                        setState(() {
+                          bloc.gender = value;
+                        });
+                      },
+                    ),
                   ),
                 ),
-              )
-            ],
-          ),
-        ],
-      ),
-    );
+                UIConstants.verticalSpace36,
+                Expanded(
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.all(0),
+                    title:
+                        const Text("Other", style: StyleConstants.mediumText),
+                    leading: Radio<Gender>(
+                      value: Gender.other,
+                      groupValue: bloc.gender,
+                      onChanged: (Gender? value) {
+                        setState(() {
+                          bloc.gender = value;
+                        });
+                      },
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ],
+        ),
+      );
+    });
   }
 }

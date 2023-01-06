@@ -17,7 +17,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final formLoginKey = GlobalKey<FormState>();
   final username = TextEditingController();
   final password = TextEditingController();
-  int? userId;
+  String? userId;
 
   Future<void> _onPress(
       LoginButtonPressed event, Emitter<LoginState> emit) async {
@@ -30,7 +30,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       (l) => state.copyWith(errMessage: l.message),
       (r) {
         UserInfo.saveTokenInfo(r.accessToken);
-        userId = r.userId;
+        userId = "${r.userId}";
         return state.copyWith(isSuccess: true);
       },
     );

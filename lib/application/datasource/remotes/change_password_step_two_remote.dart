@@ -1,4 +1,3 @@
-
 import 'package:flutter_core/flutter_core.dart';
 
 import '../../../constants/api_constants.dart';
@@ -9,10 +8,10 @@ class ChangePasswordStepTwoRemote {
   ChangePasswordStepTwoRemote(this._appClient);
 
   Future<Either<Failure, int>> changePasswordForgot(
-      String phoneNumber, String password, String passwordConfirm) async {
-    final result = await _appClient.call(ApiConstants.changePasswordForgot,
+      String oldPassword, String password, String passwordConfirm) async {
+    final result = await _appClient.call(ApiConstants.changePassword,
         data: {
-          "username": phoneNumber,
+          "oldPassword": oldPassword,
           "newPassword": password,
           "confirmNewPassword": passwordConfirm
         },

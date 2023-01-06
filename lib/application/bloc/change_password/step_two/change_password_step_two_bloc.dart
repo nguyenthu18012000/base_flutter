@@ -22,15 +22,14 @@ class ChangePasswordStepTwoBloc
 
   Future<void> _onPress(ChangePasswordButtonPressed event,
       Emitter<ChangePasswordStepTwoState> emit) async {
-    final password = event.password;
     final result = await _changePasswordStepTwoRemote.changePasswordForgot(
-        currentPassword, password, passwordConfirm.text);
-    final newState = result.fold(
-      (l) => state.copyWith(errMessage: l.message),
-      (r) => state.copyWith(isSuccess: true),
-    );
+        currentPassword, password.text, passwordConfirm.text);
+    final newState =
+        result.fold((l) => state.copyWith(errMessage: l.message), (r) {
+      UserInfo.logout();
+      return state.copyWith(isSuccess: true);
+    });
     emit(newState);
-
-  //  emit(state.copyWith(isSuccess: true, password: password));
+    //  emit(state.copyWith(isSuccess: true, password: password));
   }
 }
