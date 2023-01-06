@@ -9,13 +9,13 @@ class UserProfileRemote {
 
   Future<Either<Failure, User?>> getUserProfile(String id) async {
     final queryParameters = <String, dynamic>{r'id': id};
-    final result = await _appClient.call(ApiConstants.getUserProfile,
+    final result = await _appClient.call(ApiConstants.getUserProfile+id,
         method: RestfulMethod.get, queryParameters: queryParameters);
 
     return result.fold(
       (l) => Left(l),
       (r) {
-        return Right(r.map((e) => User.fromJson(e)));
+        return Right(User.fromJson(r));
       },
     );
   }

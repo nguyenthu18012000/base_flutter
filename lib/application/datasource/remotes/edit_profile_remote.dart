@@ -9,19 +9,33 @@ class EditProfileRemote {
 
   EditProfileRemote(this._appClient);
 
-  Future<Either<Failure, User?>> uploadAvatar(String path) async {
+  Future<Either<Failure, String?>> uploadAvatar(String path) async {
     final data = FormData();
     data.files.add(MapEntry(
-        'fileUpload',
+        'file',
         MultipartFile.fromFileSync(path,
             filename: path.split(Platform.pathSeparator).last)));
-    final result = await _appClient.call(ApiConstants.getUserProfile,
+    final result = await _appClient.call(ApiConstants.updateAvatar,
         method: RestfulMethod.post, data: data);
 
     return result.fold(
       (l) => Left(l),
       (r) {
-        return Right(r.map((e) => User.fromJson(e)));
+        return Right(User.fromJson(r).avatar);
+      },
+    );
+  }
+
+  Future<Either<Failure, User?>> updateUserProfile(User user) async {
+    final result = await _appClient.call(
+        ApiConstants.getUserProfile + user.id.toString(),
+        method: RestfulMethod.put,
+        data: user);
+
+    return result.fold(
+      (l) => Left(l),
+      (r) {
+        return Right(User.fromJson(r));
       },
     );
   }

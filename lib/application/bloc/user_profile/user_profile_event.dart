@@ -2,11 +2,10 @@ part of 'user_profile_bloc.dart';
 
 abstract class ProfileEvent {}
 
-class GetUserProfileEvent extends ProfileEvent {
-}
-// class OpenImagePicker extends ProfileEvent {
-//   final ImageSource imageSource;
-//
+class GetUserProfileEvent extends ProfileEvent {}
+
+class LogoutEvent extends ProfileEvent {}
+
 //   OpenImagePicker({this.imageSource});
 // }
 //
@@ -21,4 +20,3 @@ class GetUserProfileEvent extends ProfileEvent {
 //
 //   ProfileDescriptionChanged({this.description});
 // }
-

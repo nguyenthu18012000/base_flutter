@@ -10,7 +10,6 @@ part 'login_state.dart';
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc(this._loginRemote) : super(const LoginState()) {
     on<LoginButtonPressed>(_onPress);
-
   }
 
   final LoginRemote _loginRemote;
@@ -18,7 +17,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final formLoginKey = GlobalKey<FormState>();
   final username = TextEditingController();
   final password = TextEditingController();
-  String userId = '';
+  String? userId;
 
   Future<void> _onPress(
       LoginButtonPressed event, Emitter<LoginState> emit) async {
@@ -31,7 +30,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       (l) => state.copyWith(errMessage: l.message),
       (r) {
         UserInfo.saveTokenInfo(r.accessToken);
-        userId = r.userId ?? '';
+        userId = "${r.userId}";
         return state.copyWith(isSuccess: true);
       },
     );
