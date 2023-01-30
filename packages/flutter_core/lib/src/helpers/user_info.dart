@@ -5,7 +5,6 @@ import 'shared_pref_helper.dart';
 class UserInfo {
   UserInfo._();
   static String tokenKey = 'userToken';
-
   static String? token;
   static bool firstCheckLogin = false;
 

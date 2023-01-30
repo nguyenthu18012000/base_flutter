@@ -4,11 +4,11 @@ part of 'create_new_password_bloc.dart';
 abstract class CreateNewPasswordEvent {}
 
 class CreatePasswordButtonPressed extends CreateNewPasswordEvent {
-  final String password;
+  //final String password;
   // final String confirmPassword;
 
-  CreatePasswordButtonPressed({
-    required this.password,
-    // required this.confirmPassword,
-  });
+  CreatePasswordButtonPressed(
+      //{required this.password,
+    // required this.confirmPassword,}
+  );
 }

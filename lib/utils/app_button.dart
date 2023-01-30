@@ -60,3 +60,88 @@ class GradientButton extends StatelessWidget {
     );
   }
 }
+
+Widget buildOutLineButton(String title,
+    {required VoidCallback onTap,
+    Key? key,
+    double? height,
+    double? width,
+    double horizontalMargin = 0,
+    double borderRadius = 16.0,
+    double? radiusTopLeft,
+    double? radiusTopRight,
+    double? radiusBottomLeft,
+    double? radiusBottomRight,
+    double horizontalSpace = 16.0,
+    double verticalSpace = 4.0,
+    Color? borderColor,
+    Color textColor = Colors.black54,
+    double? fontSize,
+    FontWeight? fontWeight,
+    Color? enableBackgroundColor,
+    Color? disableBackgroundColor,
+    double borderThick = 1,
+    bool enable = true,
+    bool isShowBorder = true,
+    Color? progressColor,
+    Widget? leftIcon,
+    Widget? rightIcon,
+    int flexText = 1,
+    TextStyle? textStyle}) {
+  return InkWell(
+    key: key,
+    customBorder: RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(radiusTopLeft ?? borderRadius),
+          topRight: Radius.circular(radiusTopRight ?? borderRadius),
+          bottomLeft: Radius.circular(radiusBottomLeft ?? borderRadius),
+          bottomRight: Radius.circular(radiusBottomRight ?? borderRadius)),
+    ),
+    onTap: enable ? onTap : null,
+    child: Container(
+      margin: EdgeInsets.symmetric(horizontal: horizontalMargin),
+      width: width,
+      height: height,
+      padding: EdgeInsets.symmetric(
+          vertical: verticalSpace, horizontal: horizontalSpace),
+      decoration: BoxDecoration(
+        color: enable ? enableBackgroundColor : disableBackgroundColor,
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(radiusTopLeft ?? borderRadius),
+            topRight: Radius.circular(radiusTopRight ?? borderRadius),
+            bottomLeft: Radius.circular(radiusBottomLeft ?? borderRadius),
+            bottomRight: Radius.circular(radiusBottomRight ?? borderRadius)),
+      ),
+      child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (leftIcon != null) ...[
+                  leftIcon,
+                  const SizedBox(
+                    width: 8,
+                  )
+                ],
+                Flexible(
+                  flex: flexText,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      title,
+                      style: textStyle ??
+                          TextStyle(
+                              color: textColor,
+                              fontSize: fontSize,
+                              fontWeight: fontWeight),
+                    ),
+                  ),
+                ),
+                if (rightIcon != null) ...[
+                  const Spacer(),
+                  rightIcon,
+                ],
+              ],
+            ),
+    ),
+  );
+}

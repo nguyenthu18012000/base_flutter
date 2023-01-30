@@ -37,7 +37,11 @@ class CreatePasswordListener extends StatelessWidget {
       },
       listener: (context, state) {
         if (state.errMessage != null) {
-          core.UIHelper.showSnackBar(context, msg: state.errMessage);
+          //core.UIHelper.showSnackBar(context, msg: state.errMessage);
+          DialogService.errorDialog(context,
+              title: 'Error',
+              message: state.errMessage
+          );
         }
         if (state.isSuccess == true) {
           final bloc = context.read<CreatePasswordBloc>();

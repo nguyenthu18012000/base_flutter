@@ -25,4 +25,41 @@ class LoginRemote {
       },
     );
   }
+
+
+  Future<Either<Failure, dynamic>> subscribe(int id, String deviceToken) async {
+    final result = await _appClient.call(
+      ApiConstants.subscribeFirebase,
+      method: RestfulMethod.post,
+      data: {
+        'deviceToken': deviceToken,
+        'userId':id
+      },
+    );
+    return result.fold(
+          (l) => Left(l),
+          (r) {
+        return const Right(true);
+      },
+    );
+  }
+
+
+  Future<Either<Failure, dynamic>> unsubscribe(int id, String deviceToken) async {
+    final result = await _appClient.call(
+      ApiConstants.subscribeFirebase,
+      method: RestfulMethod.post,
+      data: {
+        'deviceToken': deviceToken,
+        'userId':id
+      },
+    );
+    return result.fold(
+          (l) => Left(l),
+          (r) {
+        return const Right(true);
+      },
+    );
+  }
+
 }

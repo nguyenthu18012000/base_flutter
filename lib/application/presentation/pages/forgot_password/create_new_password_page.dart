@@ -37,7 +37,11 @@ class CreateNewPasswordListener extends StatelessWidget {
           core.UIHelper.hideLoading();
         }
         if (state.errMessage != null) {
-          core.UIHelper.showSnackBar(context, msg: state.errMessage);
+          //core.UIHelper.showSnackBar(context, msg: state.errMessage);
+          DialogService.errorDialog(context,
+              title: 'Error',
+              message: state.errMessage
+          );
         }
         if (state.isSuccess == true) {
           core.UIHelper.showSnackBar(context, msg: 'Change success');
@@ -93,7 +97,9 @@ class CreateNewPasswordButton extends StatelessWidget {
           final bloc = context.read<CreateNewPasswordBloc>();
           FocusScope.of(context).unfocus();
           if (bloc.formCreatePasswordKey.currentState!.validate()) {
-            bloc.add(CreatePasswordButtonPressed(password: bloc.password.text));
+            bloc.add(CreatePasswordButtonPressed(
+               // password: bloc.password.text
+            ));
           }
         },
         child: const Text('Create Password'));

@@ -35,7 +35,11 @@ class LoginListener extends StatelessWidget {
           core.UIHelper.hideLoading();
         }
         if (state.errMessage != null) {
-          core.UIHelper.showSnackBar(context, msg: state.errMessage);
+         // core.UIHelper.showSnackBar(context, msg: state.errMessage);
+          DialogService.errorDialog(context,
+              title: 'Error',
+              message: state.errMessage
+          );
         }
         if (state.isSuccess == true) {
           final bloc = context.read<LoginBloc>();
@@ -115,6 +119,11 @@ class LoginButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GradientButton(
         onPressed: () {
+          // DialogService.confirmDialog(context,
+          //     title: 'ggggg',
+          //     actionTitle: 'sss',
+          //     subTitle: 'abcccc ccccccc ccccccccccc ccccccrgrgrgregrgr'
+          // );
           final bloc = context.read<LoginBloc>();
           if (bloc.formLoginKey.currentState!.validate()) {
             bloc.add(LoginButtonPressed(

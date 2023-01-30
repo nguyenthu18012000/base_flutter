@@ -46,7 +46,11 @@ class OtpConfirmListener extends StatelessWidget {
           core.UIHelper.hideLoading();
         }
         if (state.errMessage != null) {
-          core.UIHelper.showSnackBar(context, msg: state.errMessage);
+          //core.UIHelper.showSnackBar(context, msg: state.errMessage);
+          DialogService.errorDialog(context,
+              title: 'Error',
+              message: state.errMessage
+          );
         }
         if (state.isSuccess == true) {
           // Navigator.of(context).pushNamed(bloc.routeNavigate);
