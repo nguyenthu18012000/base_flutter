@@ -38,6 +38,9 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: RouteConfig.instance.routes,
       onGenerateInitialRoutes: (_) => [
         RouteConfig.instance.routeWithName(
+          // routeName: UserInfo.token == null
+          //     ? RouteConstants.login
+          //     : RouteConstants.userProfile,
           routeName: RouteConstants.login,
         ),
       ],

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_core/flutter_core.dart';
 
 part 'notification_event.dart';
+
 part 'notification_state.dart';
 
 class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {

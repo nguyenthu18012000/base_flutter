@@ -42,7 +42,11 @@ class UserInforRegisterListener extends StatelessWidget {
           core.UIHelper.hideLoading();
         }
         if (state.errMessage != null) {
-          core.UIHelper.showSnackBar(context, msg: state.errMessage);
+          //core.UIHelper.showSnackBar(context, msg: state.errMessage);
+          DialogService.errorDialog(context,
+              title: 'Error',
+              message: state.errMessage
+          );
         }
         if (state.isSuccess == true) {
           core.UIHelper.showSnackBar(context, msg: 'ok');
@@ -265,7 +269,8 @@ class _UserInformationFormState extends State<UserInformationForm> {
               DateTime? pickedDate = await showDatePicker(
                   context: context,
                   initialDate: DateTime.now(),
-                  locale: const Locale('en'),
+                  locale: const Locale('en', 'IN'),
+                  fieldHintText: 'dd/mm/yyyy',
                   firstDate: DateTime(1950),
                   //DateTime.now() - not to allow to choose before today.
                   lastDate: DateTime.now());
@@ -277,8 +282,7 @@ class _UserInformationFormState extends State<UserInformationForm> {
                   bloc.dateOfBirth.text =
                       formattedDate; //set output date to TextField value.
                 });
-              } else {
-              }
+              } else {}
             },
             autocorrect: false,
             keyboardType: TextInputType.datetime,
