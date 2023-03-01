@@ -85,12 +85,12 @@ class FileHelper {
   }
 
   Future<List<XFile?>?> pickMultipleImages({int quality = 60}) async {
-    final List<XFile?>? images =
+    final List<XFile?> images =
         await _picker.pickMultiImage(imageQuality: quality);
     if (Platform.isAndroid) {
       final listLostImages = await getLostData();
       if (listLostImages != null && listLostImages.isNotEmpty) {
-        images?.addAll(listLostImages);
+        images.addAll(listLostImages);
       }
     }
 

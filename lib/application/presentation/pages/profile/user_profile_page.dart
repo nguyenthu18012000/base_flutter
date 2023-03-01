@@ -1,14 +1,9 @@
-import 'dart:ffi';
-import 'dart:io';
-
 import 'package:base_bloc_flutter/constants/constants.dart';
 import 'package:base_bloc_flutter/utils/extensions/datetime_extension.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_core/flutter_core.dart';
 import 'package:flutter_core/flutter_core.dart' as core;
 
-import '../../../../constants/ui_constants.dart';
 import '../../../../utils/app_button.dart';
 import '../../../bloc/user_profile/user_profile_bloc.dart';
 
@@ -173,7 +168,7 @@ class AvatarWidget extends StatelessWidget {
             )
           : CircleAvatar(
               radius: 50,
-              backgroundImage: NetworkImage(avatarPath ?? ''),
+              backgroundImage: NetworkImage(avatarPath),
               backgroundColor: Colors.transparent,
             );
     });

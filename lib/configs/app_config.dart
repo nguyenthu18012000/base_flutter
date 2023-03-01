@@ -1,7 +1,7 @@
 import 'package:flutter_core/flutter_core.dart';
 
 import '../constants/constants.dart';
-import '../dependences/dependencies.dart' as di;
+import '../dependencies/dependencies.dart' as di;
 import 'env_config.dart';
 
 class AppConfig {

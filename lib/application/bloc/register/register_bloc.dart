@@ -1,8 +1,5 @@
-import 'package:base_bloc_flutter/constants/constants.dart';
-import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_core/flutter_core.dart';
-import 'package:meta/meta.dart';
 
 part 'register_event.dart';
 

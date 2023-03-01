@@ -10,7 +10,7 @@ String getRandomString(int length) => String.fromCharCodes(Iterable.generate(len
 
 extension StringExtension on String {
   bool search(String query) {
-    final String nonUnicode = this.toLowerCase().convertToUnsigned;
+    final String nonUnicode = toLowerCase().convertToUnsigned;
     final String nonUnicodeQuery = query.trim().toLowerCase().convertToUnsigned;
     return nonUnicode.contains(nonUnicodeQuery);
   }
@@ -56,7 +56,7 @@ extension StringExtension on String {
   }
 
   bool parseBool() {
-    return this.toLowerCase() == "true";
+    return toLowerCase() == "true";
   }
 
   bool get isOnlyNumber {
@@ -65,8 +65,8 @@ extension StringExtension on String {
   }
 
   String get toUpperCaseFirst {
-    if (this.length > 0) {
-      return "${this[0].toUpperCase()}${this.substring(1)}";
+    if (length > 0) {
+      return "${this[0].toUpperCase()}${substring(1)}";
     }
     return this;
   }
@@ -79,7 +79,7 @@ extension StringExtension on String {
     return phone;
   }
 
-  String get onlyMsg => this.replaceAll(RegExp(r'.[a-z]{2}-[A-Z]{2}$'), '');
+  String get onlyMsg => replaceAll(RegExp(r'.[a-z]{2}-[A-Z]{2}$'), '');
 
   String get removeFirstCharacterIsZero => int.parse(this).toString();
 
@@ -97,23 +97,23 @@ extension StringExtension on String {
 
   String get removeFirstZeroInPhoneNumber {
     if (this[0].toString() == '0') {
-      return this.substring(1, this.length);
+      return substring(1, length);
     } else {
       return this;
     }
   }
 
   String get convertCurrency {
-    if (this.length > 9) {
+    if (length > 9) {
       return '${_toDecimal(this, 1000000000)} tỷ';
     }
-    if (this.length > 6) {
+    if (length > 6) {
       return '${_toDecimal(this, 1000000)} triệu';
     }
-    if (this.length > 3) {
+    if (length > 3) {
       return '${_toDecimal(this, 1000)} nghìn';
     }
-    if (this.length > 2) {
+    if (length > 2) {
       return '${_toDecimal(this, 100)} trăm';
     }
     return this;
@@ -125,9 +125,9 @@ extension StringExtension on String {
 
   String _toDecimal(String number, int unit) => (double.parse(number) / unit).toStringAsFixed(2);
 
-  String get inCaps => this.length > 0 ? '${this[0].toUpperCase()}${this.substring(1)}' : '';
+  String get inCaps => length > 0 ? '${this[0].toUpperCase()}${substring(1)}' : '';
 
-  String get allInCaps => this.toUpperCase();
+  String get allInCaps => toUpperCase();
 
-  String get capitalizeFirstOfEach => this.replaceAll(RegExp(' +'), ' ').split(" ").map((str) => str.inCaps).join(" ");
+  String get capitalizeFirstOfEach => replaceAll(RegExp(' +'), ' ').split(" ").map((str) => str.inCaps).join(" ");
 }

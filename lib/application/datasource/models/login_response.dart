@@ -11,8 +11,8 @@ class LoginResponse {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['access_token'] = this.accessToken;
-    data['userId'] = this.userId;
+    data['access_token'] = accessToken;
+    data['userId'] = userId;
     return data;
   }
 }

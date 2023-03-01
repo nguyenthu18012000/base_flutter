@@ -48,7 +48,7 @@ class CreatePasswordListener extends StatelessWidget {
           Navigator.of(context).pushNamed(RouteConstants.userInforRegister,
               arguments: UserInforRegisterArguments(
                   phoneNumber: bloc.phoneNumber,
-                  password: state?.password ?? ''));
+                  password: state.password ?? ''));
         }
       },
       child: const CreatePasswordView(),
@@ -205,6 +205,5 @@ class _PasswordInputFormState extends State<PasswordInputForm> {
         ],
       ),
     );
-    ;
   }
 }

@@ -1,7 +1,5 @@
-import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_core/flutter_core.dart';
-import 'package:meta/meta.dart';
 
 part 'create_password_event.dart';
 part 'create_password_state.dart';

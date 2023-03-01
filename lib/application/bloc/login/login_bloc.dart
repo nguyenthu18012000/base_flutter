@@ -2,7 +2,6 @@ import 'package:base_bloc_flutter/application/datasource/datasources.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_core/flutter_core.dart';
-import 'package:meta/meta.dart';
 
 part 'login_event.dart';
 

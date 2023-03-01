@@ -1,10 +1,8 @@
 import 'package:base_bloc_flutter/application/datasource/models/models.dart';
 import 'package:base_bloc_flutter/application/datasource/remotes/remotes.dart';
-import 'package:bloc/bloc.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_core/flutter_core.dart';
-import 'package:meta/meta.dart';
 
 part 'user_infor_register_event.dart';
 

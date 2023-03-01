@@ -5,7 +5,6 @@ import 'package:base_bloc_flutter/utils/extensions/datetime_extension.dart';
 
 import '../../datasource/models/user.dart';
 import '../../datasource/remotes/edit_profile_remote.dart';
-import '../../datasource/remotes/user_profile_remote.dart';
 import '../user_infor_register/user_infor_register_bloc.dart';
 
 part 'edit_profile_event.dart';

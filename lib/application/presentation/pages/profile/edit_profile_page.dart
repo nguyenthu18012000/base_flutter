@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_core/flutter_core.dart' as core;
 import 'package:image_picker/image_picker.dart';
@@ -166,7 +165,7 @@ class AvatarWidget extends StatelessWidget {
               },
               child: CircleAvatar(
                 radius: 50,
-                backgroundImage: NetworkImage(avatarPath ?? ''),
+                backgroundImage: NetworkImage(avatarPath),
                 backgroundColor: Colors.transparent,
               ),
             );

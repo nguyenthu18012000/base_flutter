@@ -23,28 +23,28 @@ extension IntegerExtension on int {
   Color get colorFromIntValue {
     switch (this) {
       case 0:
-        return Color(0xff1555a7);
+        return const Color(0xff1555a7);
       case 1:
-        return Color(0xfff37678);
+        return const Color(0xfff37678);
       case 2:
-        return Color(0xffE60708);
+        return const Color(0xffE60708);
       case 3:
-        return Color(0xff540967);
+        return const Color(0xff540967);
     }
-    return Color(0xff1555a7);
+    return const Color(0xff1555a7);
   }
 
   Color get colorTableFromIntValue {
     switch (this) {
       case 0:
-        return Color(0xffffffff);
+        return const Color(0xffffffff);
       case 1:
-        return Color(0xfff37678);
+        return const Color(0xfff37678);
       case 2:
-        return Color(0xffE60708);
+        return const Color(0xffE60708);
       case 3:
-        return Color(0xff540967);
+        return const Color(0xff540967);
     }
-    return Color(0xffffffff);
+    return const Color(0xffffffff);
   }
 }

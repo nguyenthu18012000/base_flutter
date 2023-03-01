@@ -2,12 +2,12 @@ import 'package:intl/intl.dart';
 
 extension DateTimextention on DateTime {
   Duration get minutesFromMidNight {
-    return Duration(minutes: this.minute + this.hour * 60);
+    return Duration(minutes: minute + hour * 60);
   }
 
   String? get dateTimeToDayOfWeek {
     String? dayOfWeek;
-    switch (this.weekday) {
+    switch (weekday) {
       case DateTime.monday:
         dayOfWeek = "Thứ 2";
         break;
@@ -35,7 +35,7 @@ extension DateTimextention on DateTime {
 
   String? get dateTimeToDayOfWeekVN {
     String? dayOfWeek;
-    switch (this.weekday) {
+    switch (weekday) {
       case DateTime.monday:
         dayOfWeek = "Thứ Hai";
         break;
@@ -102,7 +102,7 @@ extension DateTimextention on DateTime {
   }
 
   DateTime addTimeToDate(DateTime hour) {
-    return DateTime(this.year, this.month, this.day, hour.hour, hour.minute);
+    return DateTime(year, month, day, hour.hour, hour.minute);
   }
 
   String get dateTimeToDDMMYYYY {
@@ -121,7 +121,7 @@ extension DateTimextention on DateTime {
   }
 
   String get monthAndYear {
-    return 'T${this.month}/${this.year}';
+    return 'T$month/$year';
   }
 
   String get dateTimeToVnHour {
@@ -135,7 +135,7 @@ extension DateTimextention on DateTime {
   }
 
   String get dateTimeToWeekdayAndDayMonth {
-    return this.dateTimeToDayOfWeek! + ", " + this.dateTimeToDayAndMonth;
+    return "${dateTimeToDayOfWeek!}, $dateTimeToDayAndMonth";
   }
 
   String get convertToString {
@@ -144,19 +144,19 @@ extension DateTimextention on DateTime {
   }
 
   String get toUtcString {
-    return this.toUtc().toIso8601String();
+    return toUtc().toIso8601String();
   }
 
   String get toUtcServer {
     final formatter = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-    return formatter.format(this.toLocal());
+    return formatter.format(toLocal());
   }
 
-  DateTime get onlyUtcDate => DateTime.utc(this.year, this.month, this.day);
+  DateTime get onlyUtcDate => DateTime.utc(year, month, day);
 
   bool isSameDate(DateTime other) {
     try {
-      return this.year == other.year && this.month == other.month && this.day == other.day;
+      return year == other.year && month == other.month && day == other.day;
     } catch (ex) {
       return false;
     }
