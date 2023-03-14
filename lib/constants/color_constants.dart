@@ -25,6 +25,8 @@ class ColorConstants {
   static const catskillWhite = Color(0xFFDFE4F1);
   static const linkWater = Color(0xFFE7F3F8);
 
+  static const inputColor = Color.fromRGBO(211, 211, 211, 0.3);
+
   static const MaterialColor primaryColorSwatch = MaterialColor(
     0xFF007AFF,
     <int, Color>{

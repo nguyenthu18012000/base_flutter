@@ -5,9 +5,14 @@ import 'constants.dart';
 class ThemeConstants {
   ThemeConstants._();
 
-  static final inputBorder = OutlineInputBorder(
-    borderSide: const BorderSide(color: ColorConstants.borderInput),
-    borderRadius: BorderRadius.circular(8.0),
+  static const inputBorder = OutlineInputBorder(
+    borderSide: BorderSide.none,
+    borderRadius: BorderRadius.all(Radius.circular(8)),
+  );
+
+  static const textTitleStyle = TextStyle(
+      fontWeight: FontWeight.w700,
+      fontSize: 30
   );
 
   static ThemeData get(BuildContext context) {
