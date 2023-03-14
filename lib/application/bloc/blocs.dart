@@ -12,3 +12,4 @@ export 'edit_profile/edit_profile_bloc.dart';
 export 'change_password/step_two/change_password_step_two_bloc.dart';
 export 'change_password/step_one/change_password_step_one_bloc.dart';
 export 'notification/notification_bloc.dart';
+export 'home/home_bloc.dart';

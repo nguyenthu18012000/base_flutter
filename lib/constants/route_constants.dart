@@ -15,4 +15,5 @@ class RouteConstants {
   static const forgotPassword = '/forgot-password';
   static const createNewPassword = '/create-new-password';
   static const notification = '/notification';
+  static const home = '/home_page';
 }

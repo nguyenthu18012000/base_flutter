@@ -66,6 +66,10 @@ Future<void> config(GetIt injector) async {
           () => const NotificationPage(),
       instanceName: RouteConstants.notification,
     );
+    injector.registerFactory<Widget>(
+          () => const HomePage(),
+      instanceName: RouteConstants.home,
+    );
   } catch (e) {
     dev.log('Config PageDependencies failed');
   }

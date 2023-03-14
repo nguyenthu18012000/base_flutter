@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
           // routeName: UserInfo.token == null
           //     ? RouteConstants.login
           //     : RouteConstants.userProfile,
-          routeName: RouteConstants.login,
+          routeName: RouteConstants.home,
         ),
       ],
       builder: EasyLoading.init(),
